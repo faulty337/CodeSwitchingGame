@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SettingManager : MonoBehaviour
 {
@@ -62,6 +63,21 @@ public class SettingManager : MonoBehaviour
 
     public void LevelSetting()
     {
-        GameManager.Level = int.Parse(level.options[level.value].text);
+        switch (level.options[level.value].text)
+        {
+            case "level 1":
+                GameManager.Level = 1;
+                break;
+            case "level 2":
+                GameManager.Level = 2;
+                break;
+            case "level 3":
+                GameManager.Level = 3;
+                break;
+            default:
+                return;
+        }
+       
+        SceneManager.LoadScene(GameManager.Game);
     }
 }

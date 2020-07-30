@@ -7,31 +7,59 @@ using TMPro;
 public class NBackManager : MonoBehaviour
 {
     public int TotalStage; //총 스테이지 길이
-    public TextMeshProUGUI count;
-    public TextMeshProUGUI question;
     public GameObject panel;
-    public string[,] Q; //문제
+    public List<string[]> Q; //문제
     public int[] data;  //사용자 입력
     public int N;
 
-    public GameObject playpanel;
-    public GameObject endpanel;
-    public bool play;
+    public GameObject playpanel, endpanel, selectpanel;
+    public string getUrl;
     // Start is called before the first frame update
     void Start()
     {
+        Q = new List<string[]>();
+        getUrl = "faulty337.cafe24.com/dataget.php";
+        StartCoroutine(DataGet());
         N = 2;
-        Q = new string[10, 2] {
-            { "1", "one" }, { "2", "two" }, { "3", "three" },
-            { "4", "four" }, { "5", "five" }, { "6", "six" },
-            { "7", "seven" }, { "8", "eight" }, { "9", "nine" },
-            { "10", "ten" }
-        };//이후에 받아올 내용
-        play = true;
         TotalStage = 10;
         data = new int[TotalStage];
-        
+        selectpanel.SetActive(true);
+        playpanel.SetActive(false);
+        endpanel.SetActive(false);
 
     }
 
+    IEnumerator DataGet()
+    {
+
+
+        WWWForm form = new WWWForm();
+        form.AddField("input_Subject", "Office");
+        WWW web = new WWW(getUrl, form);
+        do
+        {
+            yield return null;
+        }
+        while (!web.isDone);
+
+        if (web.error != null)
+        {
+            Debug.LogError("web.error=" + web.error);
+            yield break;
+        }
+        int QIndex = 0;
+        string[] ex;
+        string[] data = web.text.Split(',');
+        for (int i = 0; i < data.Length-1; i+=2)
+        {
+            ex = new string[2] { data[i], data[i + 1] };
+            Q.Add(ex);
+        }
+
+    }
+
+    public void StartGame()
+    {
+        playpanel.SetActive(true);
+    }
 }

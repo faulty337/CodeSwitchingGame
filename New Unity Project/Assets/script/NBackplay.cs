@@ -6,7 +6,7 @@ using TMPro;
 
 public class NBackplay : MonoBehaviour
 {
-    public GameObject manager;
+    public GameObject manager, endPannel;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
     public bool start; //게임 시작 유무
     public int TotalStage; //총 스테이지 길이
@@ -16,7 +16,7 @@ public class NBackplay : MonoBehaviour
     public TextMeshProUGUI count;
     public TextMeshProUGUI question;
     public Button yesbutton, nobutton; //화면 비율에 따라 할건지
-    public string[,] Q; //문제
+    public List<string[]> Q; //문제
     public int[,] data;  //사용자 입력
     public int N;
     // Start is called before the first frame update
@@ -27,9 +27,9 @@ public class NBackplay : MonoBehaviour
         sec = 1.0f;
         delay = 4.0f;
         TotalStage = manager.GetComponent<NBackManager>().TotalStage;
-        Q = (string[,])manager.GetComponent<NBackManager>().Q.Clone();
+        Q = manager.GetComponent<NBackManager>().Q.ConvertAll(s => s) ;
         N = manager.GetComponent<NBackManager>().N;   
-        data = new int[TotalStage, 4];//첫번째엔 문제, 두번째엔 문제정답, 3번째엔 사용자 입력, 4번째엔 장답여부
+        data = new int[TotalStage+1, 4];//첫번째엔 문제, 두번째엔 문제정답, 3번째엔 사용자 입력, 4번째엔 장답여부
         count.gameObject.SetActive(true);
     }
 
@@ -39,10 +39,11 @@ public class NBackplay : MonoBehaviour
         time += Time.deltaTime; //시간정보 누적
         if (stage == 0 && start)
         {
-            data[stage, 0] = Random.Range(0, 10);
+
+            data[stage, 0] = Random.Range(0, Q.Count);
             data[stage, 1] = 2;
             question.gameObject.SetActive(true);
-            question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0], Random.Range(0, 2)];
+            question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0]][Random.Range(0, 2)];
             stage++;
             return;
         }
@@ -62,19 +63,23 @@ public class NBackplay : MonoBehaviour
             {
                 if (stage > N)
                 {
+                    print(TotalStage);
                     Problem();
                 }
                 else
                 {
-                    data[stage, 0] = Random.Range(0, 10);
+                    data[stage, 0] = Random.Range(0, Q.Count);
                     data[stage, 1] = 2;
                 }
-                question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0], Random.Range(0, 2)];
+                question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0]][Random.Range(0, 2)];
                 Debug.Log(stage + "");
                 sec++;
                 stage++;
                 if (stage >= TotalStage)//게임 종료 여부
-                    manager.GetComponent<NBackManager>().play = false; //게임종료변수 변경
+                {
+                    endPannel.SetActive(true);
+                    gameObject.SetActive(false);
+                }
                 
             }
         }
@@ -90,8 +95,7 @@ public class NBackplay : MonoBehaviour
         }
         else
         {
-            
-            data[stage, 0] = Random.Range(0, 10);
+            data[stage, 0] = Random.Range(0, Q.Count);
             data[stage, 1] = 2;//2면 오답
         }
 

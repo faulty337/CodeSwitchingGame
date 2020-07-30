@@ -15,7 +15,7 @@ public class NBackend : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        saveUrl = "faulty337.cafe24.com/GameDataSave.php";
+        saveUrl = "faulty337.cafe24.com/datasave.php";
         ID = GameManager.ID;
         Len_1 = GameManager.Len_1;
         Len_2 = GameManager.Len_2;
@@ -55,26 +55,29 @@ public class NBackend : MonoBehaviour
             print(aa);
             aa = "";
         }
+        StartCoroutine(DataSave());
     }
 
-    public void Transmit()
+    IEnumerator DataSave()
     {
         WWWForm form = new WWWForm();
-
-        form.AddField("Input_id", ID);
-        form.AddField("Input_subject", Subject);
-        form.AddField("Input_date", date);
-        form.AddField("Input_score", score);
-        form.AddField("Input_time", time);
-        form.AddField("Input_question", question);
-        form.AddField("Input_answer", answer);
-        form.AddField("Input_input", input);
-        form.AddField("InpInput_resultut_id", result);
-        form.AddField("Input_Len_1", Len_1);
-        form.AddField("Input_L2n_2", Len_2);
+        form.AddField("game", GameManager.Game+"Data");
+        form.AddField("id", ID);
+        form.AddField("subject", Subject);
+        form.AddField("level", GameManager.Level);
+        form.AddField("data", date);
+        form.AddField("score", score);
+        form.AddField("time", time);
+        form.AddField("question", question);
+        form.AddField("answer", answer);
+        form.AddField("input", input);
+        form.AddField("result_id", result);
+        form.AddField("Len_1", Len_1);
+        form.AddField("L2n_2", Len_2);
 
         WWW webRequest = new WWW(saveUrl, form);
-        
+        yield return webRequest;
+        print(webRequest.text);
     }
     
 
