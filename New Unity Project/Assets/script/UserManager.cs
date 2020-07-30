@@ -45,11 +45,14 @@ public class UserManager : MonoBehaviour
 
         WWW webRequest = new WWW(LoginUrl, form);
         yield return webRequest;
-        print(webRequest.text);
         if(webRequest.text == "true")
         {
             GameManager.ID = ID;
             SceneManager.LoadScene("Main");
+        }
+        else
+        {
+
         }
     }
 
