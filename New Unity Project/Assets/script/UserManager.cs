@@ -47,7 +47,7 @@ public class UserManager : MonoBehaviour
         yield return webRequest;
         if(webRequest.text == "true")
         {
-            GameManager.ID = ID;
+            GameManager.ID = IDInputField.text;
             SceneManager.LoadScene("Main");
         }
         else

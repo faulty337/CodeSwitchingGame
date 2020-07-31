@@ -34,7 +34,7 @@ public class NBackManager : MonoBehaviour
 
 
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", "Office");
+        form.AddField("input_Subject", GameManager.Subject);
         WWW web = new WWW(getUrl, form);
         do
         {

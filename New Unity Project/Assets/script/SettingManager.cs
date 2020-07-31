@@ -27,8 +27,6 @@ public class SettingManager : MonoBehaviour
         Panels.Add(Setting_1);
         Panels.Add(SubjectChoice);
         Panels.Add(Setting_Level);
-        
-
     }
 
     public void gotoPanel(string index)

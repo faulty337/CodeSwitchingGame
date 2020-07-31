@@ -10,18 +10,19 @@ public class NBackend : MonoBehaviour
     public Text scoreObj;
     public Text timeObj;
     public string saveUrl;
-    private string Len_1, Len_2, ID, Subject, Game, date, question, answer, input, result;
+    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, result;
     private int time, score;
     // Start is called before the first frame update
     void Start()
     {
         saveUrl = "faulty337.cafe24.com/datasave.php";
-        ID = GameManager.ID;
+        id = GameManager.ID;
         Len_1 = GameManager.Len_1;
         Len_2 = GameManager.Len_2;
         Subject = GameManager.Subject;
         Game = GameManager.Game;
-        date = System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        date = System.DateTime.Now.ToString("MM/dd/yyyy");
+        print("date : ");
         time = (int)play.GetComponent<NBackplay>().time;
 
         data = (int[,])play.GetComponent<NBackplay>().data.Clone();
@@ -62,7 +63,7 @@ public class NBackend : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("game", GameManager.Game+"Data");
-        form.AddField("id", ID);
+        form.AddField("id", id);
         form.AddField("subject", Subject);
         form.AddField("level", GameManager.Level);
         form.AddField("data", date);
@@ -70,10 +71,12 @@ public class NBackend : MonoBehaviour
         form.AddField("time", time);
         form.AddField("question", question);
         form.AddField("answer", answer);
+        print("answer : " + answer);
         form.AddField("input", input);
+        print("input : " + input);
         form.AddField("result_id", result);
         form.AddField("Len_1", Len_1);
-        form.AddField("L2n_2", Len_2);
+        form.AddField("Len_2", Len_2);
 
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
