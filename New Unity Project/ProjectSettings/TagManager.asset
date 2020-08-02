@@ -9,6 +9,7 @@ TagManager:
   - Language
   - SubjectChoice
   - LevelSetting
+  - Card1
   layers:
   - Default
   - TransparentFX
