@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class gameplay : MonoBehaviour
 {
-    public GameObject manager, playPanel;
+    public GameObject manager, playPanel, blockpanel;
     public GameObject pfcard;
     private int totalCard, thCount, x, y, width, height, cardW, cardH, intervalW, intervalH;
     private bool check = true;
-    private List<string[]> Data, Q = new List<string[]>();
+    private List<string[]> Data= new List<string[]>();
+    private List<List<string>> Q = new List<List<string>>();
     private List<int> index, ranIndex = new List<int>();
     private List<GameObject> Cards = new List<GameObject>();
     public int cardnum, lastcardnum;
@@ -58,19 +59,24 @@ public class gameplay : MonoBehaviour
         }
         for (int i = 0; i< totalCard; i++)//단어 랜덤 추출(중복없이)
         {
+            
             int ran = Random.Range(0, Data.Count);
-            Q.Add(Data[ran]);
+            List<string> ca = new List<string>();
+            ca.Add(Data[ran][0]);
+            ca.Add(Data[ran][1]);
+            Q.Add(ca);
             Data.RemoveAt(ran);
         }
         int w = width;
         for (int i = 0; i < totalCard; i++)
         {
-            
+
             var card = Instantiate(pfcard);
             card.transform.SetParent(playPanel.transform);
             card.GetComponent<CardScript>().cardnum = i;
             card.GetComponent<CardScript>().cardindex = ranIndex[i];
-            card.GetComponent<CardScript>().Cardstr = ranIndex[i].ToString();
+            card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)].ToString();
+            Q[ranIndex[i]].Remove(card.GetComponent<CardScript>().Cardstr);
             card.GetComponent<RectTransform>().anchoredPosition = new Vector3(w, height, 0);
             card.SetActive(true);
             w = w + (cardW + intervalW);
@@ -93,6 +99,11 @@ public class gameplay : MonoBehaviour
 
     public void Turn()
     {
+        StartCoroutine(WaitForIt());
+    }
+    IEnumerator WaitForIt()
+    {
+        
         if (state)
         {
             lastcardnum = cardnum;
@@ -109,17 +120,14 @@ public class gameplay : MonoBehaviour
             }
             else
             {
-                StartCoroutine(WaitForIt());
+                blockpanel.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
                 Cards[cardnum].GetComponent<CardScript>().CardClose();
                 Cards[lastcardnum].GetComponent<CardScript>().CardClose();
+                blockpanel.SetActive(false);
             }
-            
+
         }
-        print(state);
-    }
-    IEnumerator WaitForIt()
-    {
-        yield return new WaitForSeconds(2.0f);
-        check = true;
+        
     }
 }

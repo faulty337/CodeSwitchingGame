@@ -6,7 +6,7 @@ public class CardManager : MonoBehaviour
 {
 
     public int state = 1; //0 => 시작ㄴㄴ, 1 => 게임시작은 했지만 카드 펼치기ㄴㄴ, 2 => 게임시작했고 카드 하나를 펼침, 3 => 게임 끝
-    public GameObject PlayPanel, SelectPanel, EndPanel;
+    public GameObject PlayPanel, SelectPanel, EndPanel, blockpanel;
     public int CardIndex;
     public List<string[]> Data = new List<string[]>();
     public string getUrl;
@@ -15,7 +15,7 @@ public class CardManager : MonoBehaviour
     void Start()
     {
         getUrl = "faulty337.cafe24.com/dataget.php";
-        
+        blockpanel.SetActive(false);
         SelectPanel.SetActive(true);
         PlayPanel.SetActive(false);
         EndPanel.SetActive(false);
@@ -41,7 +41,6 @@ public class CardManager : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
-        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);

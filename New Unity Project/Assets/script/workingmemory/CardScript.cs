@@ -25,7 +25,7 @@ public class CardScript : MonoBehaviour
     // Start is called before the first frame update
     public void CardClick()
     {
-        print(cardindex+"");
+
         playmanager.GetComponent<gameplay>().cardnum = cardnum;
         playmanager.GetComponent<gameplay>().state = !playmanager.GetComponent<gameplay>().state;
     }

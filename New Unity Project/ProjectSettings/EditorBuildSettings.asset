@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NBack.unity
     guid: 30659adcadb2bc84b92c290ce2c664b7
+  - enabled: 1
+    path: Assets/Scenes/WorkingMemory.unity
+    guid: 015602ae626729d49bbee6f70b8188b5
   m_configObjects: {}
