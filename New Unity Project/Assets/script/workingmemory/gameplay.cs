@@ -36,7 +36,8 @@ public class gameplay : MonoBehaviour
                 y = 5;
                 break;
         }
-        intervalW = (1080 - (cardW * x)) / (x+1);
+        //화면 비율 다시 맞추기(카드 각 공간은 고정으로)
+        intervalW = ((1080 - (cardW * x)) / (x + 1));
         intervalH = (600 - (cardH * y)) / (y+1);
         width = -540 + (intervalW + (cardW / 2));
         height = 300 - (intervalH + (cardH / 2));

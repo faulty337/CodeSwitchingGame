@@ -14,7 +14,7 @@ public class NBackplay : MonoBehaviour
     public float time;//시작후 프레임당 시간
     public float delay;//시작 딜레이
     public TextMeshProUGUI count;
-    public TextMeshProUGUI question;
+    public Text question;
     public Button yesbutton, nobutton; //화면 비율에 따라 할건지
     public List<string[]> Q; //문제
     public int[,] data;  //사용자 입력
@@ -43,7 +43,7 @@ public class NBackplay : MonoBehaviour
             data[stage, 0] = Random.Range(0, Q.Count);
             data[stage, 1] = 2;
             question.gameObject.SetActive(true);
-            question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0]][Random.Range(0, 2)];
+            question.text = Q[data[stage, 0]][Random.Range(0, 2)];
             stage++;
             return;
         }
@@ -71,7 +71,7 @@ public class NBackplay : MonoBehaviour
                     data[stage, 0] = Random.Range(0, Q.Count);
                     data[stage, 1] = 2;
                 }
-                question.GetComponent<TextMeshProUGUI>().text = Q[data[stage, 0]][Random.Range(0, 2)];
+                question.text = Q[data[stage, 0]][Random.Range(0, 2)];
                 Debug.Log(stage + "");
                 sec++;
                 stage++;
