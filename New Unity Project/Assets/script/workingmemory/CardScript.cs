@@ -26,8 +26,8 @@ public class CardScript : MonoBehaviour
     public void CardClick()
     {
 
-        playmanager.GetComponent<gameplay>().cardnum = cardnum;
-        playmanager.GetComponent<gameplay>().state = !playmanager.GetComponent<gameplay>().state;
+        playmanager.GetComponent<WMplay>().cardnum = cardnum;
+        playmanager.GetComponent<WMplay>().state = !playmanager.GetComponent<WMplay>().state;
     }
     public void CardOpen()
     {

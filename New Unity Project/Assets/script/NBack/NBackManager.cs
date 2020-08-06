@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public class NBackManager : MonoBehaviour
 {
@@ -61,5 +61,10 @@ public class NBackManager : MonoBehaviour
     public void StartGame()
     {
         playpanel.SetActive(true);
+    }
+
+    public void gotohome()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

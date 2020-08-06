@@ -22,9 +22,12 @@ public class UserManager : MonoBehaviour
     public string LoginUrl;
     public string SignUpUrl;
     public string ID;
+    public int SetWidth, SetHeight;
     // Start is called before the first frame update
     void Start()
     {
+        SetWidth = 16;
+        SetHeight = 9;
         LoginUrl = "faulty337.cafe24.com/Login.php";
         SignUpUrl = "faulty337.cafe24.com/SignUp.php";
     }

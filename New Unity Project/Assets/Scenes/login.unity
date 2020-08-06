@@ -1836,6 +1836,8 @@ MonoBehaviour:
   LoginUrl: 
   SignUpUrl: 
   ID: 
+  SetWidth: 0
+  SetHeight: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

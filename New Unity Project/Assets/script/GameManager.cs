@@ -10,6 +10,7 @@ public static class GameManager
     private static int _Level;
     private static string _Len_1;
     private static string _Len_2;
+    private static int _state;
 
     public static string ID
     {
@@ -41,6 +42,11 @@ public static class GameManager
         set;
     }
     public static string Len_2
+    {
+        get;
+        set;
+    }
+    public static int state
     {
         get;
         set;
