@@ -24,8 +24,6 @@ public class SimonManager : MonoBehaviour
     }
     IEnumerator DataGet()
     {
-
-
         WWWForm form = new WWWForm();
         form.AddField("input_Subject", "Office"); //GameManager.Subject
         WWW web = new WWW(getUrl, form);
@@ -34,6 +32,7 @@ public class SimonManager : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
+        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
@@ -47,9 +46,15 @@ public class SimonManager : MonoBehaviour
             ex = new string[2] { data[i], data[i + 1] };
             Data.Add(ex);
         }
+        print(Data.Count);
     }
     public void gameStart()
     {
         PlayPanel.SetActive(true);
+    }
+
+    public void gameEnd(){
+        PlayPanel.SetActive(false);
+        EndPanel.SetActive(true);
     }
 }

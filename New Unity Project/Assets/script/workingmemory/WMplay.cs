@@ -24,7 +24,7 @@ public class WMplay : MonoBehaviour
         cardH = (int)pfcard.GetComponent<RectTransform>().rect.height;
         cardMargin = 10;
        
-        switch (1)//GameManager.Level
+        switch (2)//GameManager.Level
         {
             case 1 :
                 x = 2;

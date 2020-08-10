@@ -679,7 +679,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC601\uC5B4"
+  m_Text: "\uC5B8\uC5B42"
 --- !u!222 &154192125
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3276,6 +3276,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: "\uC5B8\uC5B42"
+      m_Image: {fileID: 0}
     - m_Text: "\uC601\uC5B4"
       m_Image: {fileID: 0}
     - m_Text: "\uD55C\uAD6D\uC5B4"
@@ -3597,6 +3599,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: "\uC5B8\uC5B41"
+      m_Image: {fileID: 0}
     - m_Text: "\uD55C\uAD6D\uC5B4"
       m_Image: {fileID: 0}
     - m_Text: "\uC601\uC5B4"
@@ -4449,7 +4453,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD55C\uAD6D\uC5B4"
+  m_Text: "\uC5B8\uC5B41"
 --- !u!222 &1073715557
 CanvasRenderer:
   m_ObjectHideFlags: 0
