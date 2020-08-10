@@ -67,22 +67,9 @@ public class SettingManager : MonoBehaviour
         gotoPanel("3, 4, 5");
     }
 
-    public void LevelSetting()
+    public void LevelSetting(int level)
     {
-        switch (level.options[level.value].text)
-        {
-            case "level 1":
-                GameManager.Level = 1;
-                break;
-            case "level 2":
-                GameManager.Level = 2;
-                break;
-            case "level 3":
-                GameManager.Level = 3;
-                break;
-            default:
-                return;
-        }
+        
         GameManager.state = 6; //게임 상태
         SceneManager.LoadScene(GameManager.Game);
     }
