@@ -57,4 +57,9 @@ public class StroopManager : MonoBehaviour
         playPanel.SetActive(true);
     }
 
+    public void gameEnd(){
+        playPanel.SetActive(false);
+        endPanel.SetActive(true);
+    }
+
 }

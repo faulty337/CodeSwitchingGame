@@ -25,7 +25,7 @@ public class Simonplay : MonoBehaviour
         print(Data[0][0]);
         print("Aaa");
         start = false;
-        Qtime = 0.5f;
+        Qtime = 1.0f;
         // Len1Button.GetComponent<Text>().text = GameManager.Len_1;
         // Len2Button.GetComponent<Text>().text = GameManager.Len_2;
          
@@ -46,7 +46,7 @@ public class Simonplay : MonoBehaviour
         // }
     }
 
-    public void timer(float tiem){
+    public void Timer(float tiem){
         if(time > 3.0f){
 
         }
