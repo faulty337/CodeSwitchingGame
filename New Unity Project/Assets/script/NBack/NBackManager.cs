@@ -12,7 +12,7 @@ public class NBackManager : MonoBehaviour
     public int[] data;  //사용자 입력
     public int N;
 
-    public GameObject playpanel, endpanel, selectpanel;
+    public GameObject playpanel, endpanel, selectpanel, blockPanel;
     public string getUrl;
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class NBackManager : MonoBehaviour
         getUrl = "faulty337.cafe24.com/dataget.php";
         StartCoroutine(DataGet());
         N = 2;
-        TotalStage = 10;
+        TotalStage = 40;
         data = new int[TotalStage];
         selectpanel.SetActive(true);
         playpanel.SetActive(false);
@@ -31,17 +31,16 @@ public class NBackManager : MonoBehaviour
 
     IEnumerator DataGet()
     {
-
-
+        blockPanel.SetActive(true);
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", GameManager.Subject);
+        form.AddField("input_Subject", "Office");//GameManager.Subject
         WWW web = new WWW(getUrl, form);
         do
         {
             yield return null;
         }
         while (!web.isDone);
-
+        blockPanel.SetActive(false);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
@@ -58,9 +57,13 @@ public class NBackManager : MonoBehaviour
 
     }
 
-    public void StartGame()
+    public void GameStart()
     {
         playpanel.SetActive(true);
+    }
+    public void GameEnd(){
+        playpanel.SetActive(false);
+        endpanel.SetActive(true);
     }
 
     public void gotohome()

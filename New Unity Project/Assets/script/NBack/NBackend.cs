@@ -10,52 +10,27 @@ public class NBackend : MonoBehaviour
     public Text scoreObj;
     public Text timeObj;
     public string saveUrl;
-    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, result;
-    private int time, score;
+    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime;
+    private int time, score, totalstage;
+    
     // Start is called before the first frame update
     void Start()
     {
+        totalstage = play.GetComponent<NBackplay>().TotalStage;
         saveUrl = "faulty337.cafe24.com/datasave.php";
-        id = GameManager.ID;
-        Len_1 = GameManager.Len_1;
-        Len_2 = GameManager.Len_2;
-        Subject = GameManager.Subject;
-        Game = GameManager.Game;
         date = System.DateTime.Now.ToString("MM/dd/yyyy");
-        print("date : ");
-        time = (int)play.GetComponent<NBackplay>().time;
-
-        data = (int[,])play.GetComponent<NBackplay>().data.Clone();
-        for (int i = 0; data.GetLength(0) > i; i++)
-        {
-            if (data[i, 1] == data[i, 2])
-                data[i, 3] = 1;
-            else
-                data[i, 3] = 2;
-        }
-        for (int i= 0; data.GetLength(0) > i; i++)
-        {
-            if(data[i, 3] == 1)
-            {
-                score++;
-            }
-        }
-        question = extract(data, 0);
-        answer = extract(data, 1);
-        input = extract(data, 2);
-        result = extract(data, 3);
-        scoreObj.GetComponent<Text>().text = "정  확  도  " + score;
-        timeObj.GetComponent<Text>().text = "소요시간  " + time;
-        string aa = "";
-        for (int i = 0; data.GetLength(0) > i; i++)
-        {
-            for (int j = 0; data.GetLength(1) > j; j++)
-            {
-                aa += data[i, j] + ",";
-            }
-            print(aa);
-            aa = "";
-        }
+        
+        answer = extract(play.GetComponent<NBackplay>().Answer);
+        print(answer);
+        input = extract(play.GetComponent<NBackplay>().input);
+        print(input);
+        reactionTime = extract(play.GetComponent<NBackplay>().RTime);
+        print(reactionTime);
+        correct = CorrectResult(play.GetComponent<NBackplay>().Answer,play.GetComponent<NBackplay>().input);
+        print(correct);
+        question = QuestionResult(play.GetComponent<NBackplay>().Q);
+        print(question);
+        // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
     }
 
@@ -63,33 +38,51 @@ public class NBackend : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("game", GameManager.Game+"Data");
-        form.AddField("id", id);
-        form.AddField("subject", Subject);
+        form.AddField("date", date);
+        form.AddField("id", GameManager.ID);
+        form.AddField("Len_1", GameManager.Len_1);
+        form.AddField("Len_2", GameManager.Len_2);
+        form.AddField("subject", GameManager.Subject);
         form.AddField("level", GameManager.Level);
-        form.AddField("data", date);
-        form.AddField("score", score);
-        form.AddField("time", time);
         form.AddField("question", question);
         form.AddField("answer", answer);
-        print("answer : " + answer);
         form.AddField("input", input);
-        print("input : " + input);
-        form.AddField("result_id", result);
-        form.AddField("Len_1", Len_1);
-        form.AddField("Len_2", Len_2);
-
+        form.AddField("correct", correct);
+        form.AddField("reactionTime", reactionTime);
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
         print(webRequest.text);
     }
     
+    public string CorrectResult(string[] ans, string[] input){
+        string result = "";
+        for(int i=0; i<totalstage; i++){
+            if(ans[i] == input[i]){
+                
+                result += ",correct";
+            }else{
+                result += ",incorrect";
+            }
+        }
+        return result;
+    }
 
-    public string extract(int[,] data, int index)
+    public string QuestionResult(string[,] Q){
+        string result = "";
+        for(int i = 0; i < totalstage; i++){
+            print(Q[i,1]);
+            result+= ","+Q[i, 1];
+        }
+        return result;
+        
+    }
+
+    public string extract(string[] data)
     {
-        string result = data[0, index]+"";
-        for(int i = 1; data.GetLength(0) > i; i++)
+        string result = "";
+        for(int i = 0; totalstage > i; i++)
         {
-            result += ", " + data[i, index];
+            result += "," + data[i];
         }
 
         return result;

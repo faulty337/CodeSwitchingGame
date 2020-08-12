@@ -16,98 +16,98 @@ public class NBackplay : MonoBehaviour
     public TextMeshProUGUI count;
     public Text question;
     public Button yesbutton, nobutton; //화면 비율에 따라 할건지
-    public List<string[]> Q; //문제
-    public int[,] data;  //사용자 입력
-    public int N;
+    public List<string[]> data, datacopy = new List<string[]>(); //문제
+    public string[,] Q;  //사용자 입력
+    public string[] correct, input, RTime, Answer;
+    public List<int> index;
+    public int N, RanQ, RanI, Ran;
     // Start is called before the first frame update
     void Start()
     {
-        start = false;
+        TotalStage = manager.GetComponent<NBackManager>().TotalStage;
+        N = manager.GetComponent<NBackManager>().N;
         time = 1.0f;
         sec = 1.0f;
-        delay = 4.0f;
-        TotalStage = manager.GetComponent<NBackManager>().TotalStage;
-        Q = manager.GetComponent<NBackManager>().Q.ConvertAll(s => s) ;
-        N = manager.GetComponent<NBackManager>().N;   
-        data = new int[TotalStage+1, 4];//첫번째엔 문제, 두번째엔 문제정답, 3번째엔 사용자 입력, 4번째엔 장답여부
-        count.gameObject.SetActive(true);
+        input = new string[TotalStage+1];
+        RTime = new string[TotalStage+1];
+        Answer = new string[TotalStage + N];
+        data = manager.GetComponent<NBackManager>().Q.ConvertAll(s => s) ;
+        datacopy = data.ConvertAll(s => s);
+        index = new List<int>();
+        for(int i = 0; i < data.Count; i++){
+            index.Add(i);
+        }
+           
+        Q = new string[TotalStage+N, 4];//문제 인덱스, 출력할 문제, 문제 한영 여부
+        
+        for(int i = 0; i < N; i++){
+            RanQ = index[Random.Range(0, data.Count)];
+            RanI = Random.Range(0, 2);
+            Q[i,0] = RanQ.ToString();
+            Q[i,1] = datacopy[RanQ][RanI];
+            Q[i,2] = RanI.ToString();
+            index.Remove(RanQ);
+            datacopy.Remove(datacopy[RanQ]);
+            Answer[i] = "No";
+        }
+        for(int i = 0; i< TotalStage; i++){
+            Questionmaking(i);
+        }
+        input[stage]="pass";
+        RTime[stage] = "1";
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         time += Time.deltaTime; //시간정보 누적
-        if (stage == 0 && start)
-        {
-
-            data[stage, 0] = Random.Range(0, Q.Count);
-            data[stage, 1] = 2;
-            question.gameObject.SetActive(true);
-            question.text = Q[data[stage, 0]][Random.Range(0, 2)];
-            stage++;
-            return;
+        if(time > sec){
+            NextQuestion();
         }
-        if (!start)
-        {
-            count.GetComponent<TextMeshProUGUI>().text = ((int)time).ToString();
-            if (time > delay)
-            {
-                time = 0.0f;
-                start = true;
-                count.gameObject.SetActive(false);
+    }
+
+    public void Questionmaking(int stage){
+        Ran = Random.Range(0, 2);
+        string question;
+        int KE;
+        int index;
+        if(Ran == 0){
+            index = int.Parse(Q[stage, 0]);
+            if(Q[stage, 2] == "0"){
+                KE = 1;
+            }else{
+                KE = 0;
             }
+            question = data[int.Parse(Q[stage, 0])][KE];
+            Answer[stage+N] = "Yes";
+            
+        }else{
+            index = Random.Range(0, data.Count);
+            KE = Random.Range(0, 1);
+            question = data[index][KE];
+            Answer[stage+N] = "No";
         }
-        else//게임 시작부분
-        {
-            if (time > sec) //stage 증가 시점(1초마다 실행)
-            {
-                if (stage > N)
-                {
-                    print(TotalStage);
-                    Problem();
-                }
-                else
-                {
-                    data[stage, 0] = Random.Range(0, Q.Count);
-                    data[stage, 1] = 2;
-                }
-                question.text = Q[data[stage, 0]][Random.Range(0, 2)];
-                Debug.Log(stage + "");
-                sec++;
-                stage++;
-                if (stage >= TotalStage)//게임 종료 여부
-                {
-                    endPannel.SetActive(true);
-                    gameObject.SetActive(false);
-                }
-                
-            }
-        }
+        Q[stage + N,0] = index.ToString();
+        Q[stage+N, 1] = question;
+        Q[stage+N, 2] = KE.ToString();
     }
 
-    void Problem()//이함수는 N번째 스테이지 이후부터 사용해야함
-    {
-        if (0.5 > Random.Range(0.0f, 1.5f))//거의 3/1확률
-        {
-            Debug.Log("next");
-            data[stage, 0] = data[stage- N, 0];
-            data[stage, 1] = 1;//1이면 정답
+    public void NextQuestion(){
+        question.text = Q[stage, 1];
+        stage++;
+        time=0.0f;
+        if(stage > 39){
+            manager.GetComponent<NBackManager>().GameEnd();
         }
-        else
-        {
-            data[stage, 0] = Random.Range(0, Q.Count);
-            data[stage, 1] = 2;//2면 오답
-        }
-
+        input[stage]="pass";
+        RTime[stage] = "1";
     }
 
-    public void YesButton()
+    public void NBackButton(string BtName)
     {
-        data[stage, 2] = 1;
-    }
-
-    public void NoButton()
-    {
-        data[stage, 2] = 2;
+       input[stage] = BtName;
+       RTime[stage] = time.ToString();
+       NextQuestion();
     }
 }

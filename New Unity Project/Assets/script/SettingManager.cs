@@ -69,7 +69,7 @@ public class SettingManager : MonoBehaviour
 
     public void LevelSetting(int level)
     {
-        
+        GameManager.Level = level;
         GameManager.state = 6; //게임 상태
         SceneManager.LoadScene(GameManager.Game);
     }
