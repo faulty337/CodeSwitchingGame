@@ -37,7 +37,7 @@ public class NBackend : MonoBehaviour
     IEnumerator DataSave()
     {
         WWWForm form = new WWWForm();
-        form.AddField("game", GameManager.Game+"Data");
+        form.AddField("game", GameManager.Game);
         form.AddField("date", date);
         form.AddField("id", GameManager.ID);
         form.AddField("Len_1", GameManager.Len_1);

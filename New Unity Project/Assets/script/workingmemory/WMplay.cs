@@ -7,14 +7,15 @@ public class WMplay : MonoBehaviour
 {
     public GameObject manager, playPanel, blockpanel;
     public GameObject pfcard;
-    private int totalCard, thCount, x, y, width, height, cardW, cardH, DistanceW, DistanceH, cardMargin;
+    private int thCount, x, y, width, height, cardW, cardH, DistanceW, DistanceH, cardMargin;
     public Text count;
     private List<string[]> Data= new List<string[]>();
     private List<List<string>> Q = new List<List<string>>();
     private List<int> index, ranIndex = new List<int>();
     private List<GameObject> Cards = new List<GameObject>();
-    public int cardnum, lastcardnum, touchCount, failCount, passCount;
-    private float time;
+    public int cardnum, totalCard, lastcardnum, touchCount, failCount, passCount;
+    public string[] question;
+    public float time;
     public bool state; //true면 카드 open안된상태, false면 다른 카드가 open된 상태
 
     // Start is called before the first frame update
@@ -45,6 +46,7 @@ public class WMplay : MonoBehaviour
         width = (-Screen.width/2) + ((Screen.width - ((cardW * x) + (cardMargin * (x - 1))))/2)+cardW/2;
         height = (Screen.height / 2) - ((Screen.height - ((cardH * y) + (cardMargin * (y - 1))))/2)-cardH/2;
         totalCard = ((x * y) / 2)*2;
+        question = new string[totalCard];
         Data = manager.GetComponent<WMManager>().Data.ConvertAll(s => s);
        
         index = new List<int>();
@@ -61,7 +63,7 @@ public class WMplay : MonoBehaviour
             ranIndex.Add(index[ran]);
             index.RemoveAt(ran);
         }
-        for (int i = 0; i< totalCard; i++)//단어 랜덤 추출(중복없이)
+        for (int i = 0; i< totalCard/2; i++)//단어 랜덤 추출(중복없이)
         {
             
             int ran = Random.Range(0, Data.Count);
@@ -79,8 +81,10 @@ public class WMplay : MonoBehaviour
             card.transform.SetParent(playPanel.transform);
             card.GetComponent<CardScript>().cardnum = i;
             card.GetComponent<CardScript>().cardindex = ranIndex[i];
-            card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)].ToString();
+            card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
+            question[i] = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
             Q[ranIndex[i]].Remove(card.GetComponent<CardScript>().Cardstr);
+            
             card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, height);
             card.SetActive(true);
             w = w + DistanceW;

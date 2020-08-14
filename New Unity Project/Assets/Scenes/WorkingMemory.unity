@@ -1468,9 +1468,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bccddb2bd820d9848a95c3c4f563dd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  play: {fileID: 0}
   FailCount: {fileID: 736266647}
   Time: {fileID: 312913867}
-  nextButton: {fileID: 0}
+  nextButton: {fileID: 603538773}
 --- !u!114 &834254846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1797,10 +1798,13 @@ MonoBehaviour:
   pfcard: {fileID: 1602175274}
   count: {fileID: 1991959033}
   cardnum: 0
+  totalCard: 0
   lastcardnum: 0
   touchCount: 0
   failCount: 0
   passCount: 0
+  question: []
+  time: 0
   state: 0
 --- !u!1 &985291237
 GameObject:
