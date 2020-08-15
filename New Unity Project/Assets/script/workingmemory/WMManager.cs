@@ -70,6 +70,7 @@ public class WMManager : MonoBehaviour
     public void gotohome()
     {
         SceneManager.LoadScene("Main");
+        GameManager.state = 2;
     }
 
     public void nextLevel()
@@ -80,4 +81,5 @@ public class WMManager : MonoBehaviour
             PlayPanel.SetActive(true);
         }
     }
+    
 }

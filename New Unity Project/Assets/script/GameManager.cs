@@ -8,8 +8,8 @@ public static class GameManager
     private static string _Game;
     private static int _Subject;
     private static int _Level;
-    private static string _Len_1;
-    private static string _Len_2;
+    private static string _Lan_1;
+    private static string _Lan_2;
     private static int _state;
 
     public static string ID
@@ -36,12 +36,12 @@ public static class GameManager
         set;
     }
 
-    public static string Len_1
+    public static string Lan_1
     {
         get;
         set;
     }
-    public static string Len_2
+    public static string Lan_2
     {
         get;
         set;

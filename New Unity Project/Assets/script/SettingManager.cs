@@ -18,7 +18,7 @@ public class SettingManager : MonoBehaviour
     // public GameObject past;
     // public GameObject present;
     private List<GameObject> Panels;
-    public Dropdown Len_1, Len_2, level;
+    public Dropdown Lan_1, Lan_2, level;
 
     bool PopupStatus = false;
 
@@ -59,12 +59,12 @@ public class SettingManager : MonoBehaviour
 
     public void LenguageSetting()
     {
-        if(Len_1.options[Len_1.value].text == "언어1" || Len_2.options[Len_2.value].text=="언어2"){
+        if(Lan_1.options[Lan_1.value].text == "언어1" || Lan_2.options[Lan_2.value].text=="언어2"){
             PopupB.gameObject.SetActive(true);
             Popup("두 언어 모두 선택해주세요.");
         }else{
-            GameManager.Len_1 = Len_1.options[Len_1.value].text;
-            GameManager.Len_2 = Len_2.options[Len_2.value].text;
+            GameManager.Lan_1 = Lan_1.options[Lan_1.value].text;
+            GameManager.Lan_2 = Lan_2.options[Lan_2.value].text;
             gotoPanel("2, 3");
             GameManager.state = 4;
         }

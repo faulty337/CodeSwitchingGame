@@ -25,6 +25,7 @@ public class WMEnd : MonoBehaviour
         {
             nextButton.interactable = false;
         }
+        StartCoroutine(DataSave());
     }
 
     // Update is called once per frame
@@ -32,14 +33,14 @@ public class WMEnd : MonoBehaviour
     {
         
     }
-        IEnumerator DataSave()
+    IEnumerator DataSave()
     {
         WWWForm form = new WWWForm();
         form.AddField("game", GameManager.Game);
         form.AddField("date", date);
         form.AddField("id", GameManager.ID);
-        form.AddField("Len_1", GameManager.Len_1);
-        form.AddField("Len_2", GameManager.Len_2);
+        form.AddField("Lan_1", GameManager.Lan_1);
+        form.AddField("Lan_2", GameManager.Lan_2);
         form.AddField("subject", GameManager.Subject);
         form.AddField("level", GameManager.Level);
         form.AddField("question", question);

@@ -8,7 +8,7 @@ public class NBackplay : MonoBehaviour
 {
     public GameObject manager, endPannel;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
-    public bool start; //게임 시작 유무
+    public bool start = false; //게임 시작 유무
     public int TotalStage; //총 스테이지 길이
     public float sec; //한 문제당 풀이 시간??
     public float time;//시작후 프레임당 시간
@@ -62,9 +62,17 @@ public class NBackplay : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime; //시간정보 누적
-        if(time > sec){
-            NextQuestion();
+        if(start){
+            if(time > sec){
+                NextQuestion();
+            }
+        }else{
+            if(time > 1.0f){
+                start = true;
+                time = 0.0f;
+            }
         }
+
     }
 
     public void Questionmaking(int stage){

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StroopManager : MonoBehaviour
 {
@@ -60,6 +61,11 @@ public class StroopManager : MonoBehaviour
     public void gameEnd(){
         playPanel.SetActive(false);
         endPanel.SetActive(true);
+    }
+        public void gotohome()
+    {
+        SceneManager.LoadScene("Main");
+        GameManager.state = 1;
     }
 
 }

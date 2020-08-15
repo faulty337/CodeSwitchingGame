@@ -7459,8 +7459,8 @@ MonoBehaviour:
   present: {fileID: 0}
   PopupB: {fileID: 1175357900}
   PopupText: {fileID: 1020852673}
-  Len_1: {fileID: 874528353}
-  Len_2: {fileID: 816602449}
+  Lan_1: {fileID: 874528353}
+  Lan_2: {fileID: 816602449}
   level: {fileID: 0}
 --- !u!1 &1866332321
 GameObject:

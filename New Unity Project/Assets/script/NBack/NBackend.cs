@@ -10,7 +10,7 @@ public class NBackend : MonoBehaviour
     public Text scoreObj;
     public Text timeObj;
     public string saveUrl;
-    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime;
+    private string Lan_1, Lan_2, id, Subject, Game, date, question, answer, input, correct, reactionTime;
     private int time, score, totalstage;
     
     // Start is called before the first frame update
@@ -40,8 +40,8 @@ public class NBackend : MonoBehaviour
         form.AddField("game", GameManager.Game);
         form.AddField("date", date);
         form.AddField("id", GameManager.ID);
-        form.AddField("Len_1", GameManager.Len_1);
-        form.AddField("Len_2", GameManager.Len_2);
+        form.AddField("Lan_1", GameManager.Lan_1);
+        form.AddField("Lan_2", GameManager.Lan_2);
         form.AddField("subject", GameManager.Subject);
         form.AddField("level", GameManager.Level);
         form.AddField("question", question);

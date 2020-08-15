@@ -46,7 +46,6 @@ public class NBackManager : MonoBehaviour
             Debug.LogError("web.error=" + web.error);
             yield break;
         }
-        int QIndex = 0;
         string[] ex;
         string[] data = web.text.Split(',');
         for (int i = 0; i < data.Length-1; i+=2)
@@ -69,5 +68,6 @@ public class NBackManager : MonoBehaviour
     public void gotohome()
     {
         SceneManager.LoadScene("Main");
+        GameManager.state = 1;
     }
 }
