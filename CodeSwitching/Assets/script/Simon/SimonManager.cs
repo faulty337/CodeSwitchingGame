@@ -8,7 +8,7 @@ public class SimonManager : MonoBehaviour
 {
 
     public List<string[]> Data = new List<string[]>();
-    public GameObject SelectPanel, PlayPanel, EndPanel;
+    public GameObject SelectPanel, PlayPanel, EndPanel, blockPanel2;
     private string getUrl = "faulty337.cafe24.com/dataget.php";
     public Text Description;
     private string level;
@@ -19,6 +19,7 @@ public class SimonManager : MonoBehaviour
         PlayPanel.SetActive(false);
         EndPanel.SetActive(false);
         StartCoroutine(DataGet());
+        blockPanel2.SetActive(false);
         Description.text = GameManager.Lan_1+" 단어가 제시되면, [왼쪽(LEFT)] 버튼을 누르고, "+GameManager.Lan_2+" 단어가 제시되면 [오른쪽(RIGHT)] 버튼을 누르세요. \n\n게임설명을 \"꼭\" 보세요.";
     }
 
@@ -30,7 +31,9 @@ public class SimonManager : MonoBehaviour
     IEnumerator DataGet()
     {
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", "Office"); //GameManager.Subject
+        form.AddField("input_Subject", GameManager.Subject); 
+        form.AddField("Lan1", "");
+        form.AddField("Lan2", "");
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -46,22 +49,40 @@ public class SimonManager : MonoBehaviour
         string[] data = web.text.Split(',');
         for (int i = 0; i < data.Length - 1; i += 2)
         {
-            ex = new string[2] { data[i], data[i + 1] };
+            ex = new string[2] {data[i + 1], data[i] };
             Data.Add(ex);
         }
     }
     public void gameStart()
     {
         PlayPanel.SetActive(true);
+        PlayPanel.GetComponent<Simonplay>().Start();
     }
 
     public void gameEnd(){
         PlayPanel.SetActive(false);
         EndPanel.SetActive(true);
+        blockPanel2.SetActive(true);
+        
+        EndPanel.GetComponent<Simonend>().EndSetting();
     }
 
     public void gotohome(){
         GameManager.state = 2;
         SceneManager.LoadScene("Main");
+    }
+    public void retry(){
+        blockPanel2.SetActive(false);
+        // EndPanel.GetComponent<Simonend>().DelRank();
+        EndPanel.SetActive(false);
+        SelectPanel.SetActive(true);
+    }
+
+    public void nextLevel(){
+        if(GameManager.Level>3){
+            GameManager.Level +=1;
+        }
+        retry();
+
     }
 }

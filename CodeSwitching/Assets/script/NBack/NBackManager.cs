@@ -52,7 +52,7 @@ public class NBackManager : MonoBehaviour
     {
         blockPanel.SetActive(true);
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", "Office");//GameManager.Subject
+        form.AddField("input_Subject", GameManager.Subject);//
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -78,11 +78,13 @@ public class NBackManager : MonoBehaviour
     public void GameStart()
     {
         playpanel.SetActive(true);
+        playpanel.GetComponent<NBackplay>().Start();
     }
     public void GameEnd(){
         playpanel.SetActive(false);
         blockPanel2.SetActive(true);
         endpanel.SetActive(true);
+        endpanel.GetComponent<NBackend>().EndSetting();
     }
 
     public void gotohome()

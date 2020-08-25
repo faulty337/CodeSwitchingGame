@@ -8,7 +8,7 @@ public class StroopManager : MonoBehaviour
 {
 
     private string getUrl;
-    public GameObject selectPanel, playPanel, endPanel;
+    public GameObject selectPanel, playPanel, endPanel, blockPanel2;
     public List<string[]> Data = new List<string[]>();
     public Text Description;
     // Start is called before the first frame update
@@ -61,7 +61,6 @@ public class StroopManager : MonoBehaviour
             Debug.LogError("web.error=" + web.error);
             yield break;
         }
-        int QIndex = 0;
         string[] ex;
         string[] data = web.text.Split(',');
         for (int i = 0; i < data.Length - 1; i += 2)
@@ -74,16 +73,31 @@ public class StroopManager : MonoBehaviour
     public void gameStart()
     {
         playPanel.SetActive(true);
+        playPanel.GetComponent<StroopPlay>().Start();
     }
 
     public void gameEnd(){
         playPanel.SetActive(false);
         endPanel.SetActive(true);
+        endPanel.GetComponent<StroopEnd>().Start();
     }
-        public void gotohome()
+    public void gotohome()
     {
         SceneManager.LoadScene("Main");
         GameManager.state = 1;
+    }
+    public void retry(){
+        blockPanel2.SetActive(false);
+        endPanel.SetActive(false);
+        selectPanel.SetActive(true);
+    }
+
+    public void nextLevel(){
+        if(GameManager.Level>3){
+            GameManager.Level +=1;
+        }
+        retry();
+
     }
 
 }

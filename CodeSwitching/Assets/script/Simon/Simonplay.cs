@@ -7,7 +7,7 @@ public class Simonplay : MonoBehaviour
 {
     public GameObject manager;
     public Button Len1Button, Len2Button;
-    public float time, Qtime;
+    public float time, Qtime, totalTime;
     public Text Question;
     public bool start = false;
     private List<string[]> Data = new List<string[]>();
@@ -18,8 +18,9 @@ public class Simonplay : MonoBehaviour
     private TextAnchor[] alignment;
     
     // Start is called before the first frame update
-    void Start()
-    {
+    public void Start()
+    {   
+        stage = 0;
         TotalStage = 40;
         alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
         Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
@@ -49,12 +50,14 @@ public class Simonplay : MonoBehaviour
         }
         // Len1Button.GetComponent<Text>().text = GameManager.Len_1;
         // Len2Button.GetComponent<Text>().text = GameManager.Len_2;
+        startsatting();
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        totalTime += Time.deltaTime;
         time += Time.deltaTime;
         if(start){
             if(time > Qtime){
@@ -110,7 +113,6 @@ public class Simonplay : MonoBehaviour
         Question.text = Data[ran][ran2];
         Q[stage] = Data[ran][ran2];
         Answer[stage] = direction[ran2];
-        print(stage);
         if(stage >= TotalStage){
             manager.GetComponent<SimonManager>().gameEnd();
         }
@@ -140,7 +142,6 @@ public class Simonplay : MonoBehaviour
         Question.text = Data[ran][ran2];
         Q[stage] = Data[ran][ran2];
         Answer[stage] = direction[ran2];
-        print(stage);
         if(stage >= TotalStage){
             manager.GetComponent<SimonManager>().gameEnd();
         }

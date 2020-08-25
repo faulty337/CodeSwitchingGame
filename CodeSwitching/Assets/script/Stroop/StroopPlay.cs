@@ -17,7 +17,7 @@ public class StroopPlay : MonoBehaviour
     public float time, Qtime, totalTime;
     public bool start = false;
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         colorNum[0] = "<color=#bf2836>";
         colorNum[0] = "<color=#f3c500>";
@@ -74,17 +74,17 @@ public class StroopPlay : MonoBehaviour
         Q[stage] = Data[ran][ran2];
         switch (level){
             case 1 :
-                Answer[stage] = colorstr[ans];
+                Answer[stage] = color[ans];
                 break;
             case 2 :
                 if(ran2 == 1)
-                    Answer[stage] = colorstr[stage];
+                    Answer[stage] = color[ans];
                 else
                     Answer[stage] = "Pass";
                 break;
             case 3 :
                 if(ran2 == 0)
-                    Answer[stage] = colorstr[stage];
+                    Answer[stage] = color[ans];
                 else
                     Answer[stage] = "Pass";
                 break;

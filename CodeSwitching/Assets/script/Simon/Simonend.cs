@@ -6,42 +6,48 @@ using UnityEngine.UI;
 public class Simonend : MonoBehaviour
 {
     public int totalscore;
-    public GameObject play;
+    public GameObject play, rankbase, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
     public Text scoreObj;
     public Text timeObj;
     private string saveUrl;
-    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime, position, Compatible;
+    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime, position, Compatible, rankUrl;
     private int time, totalstage;
     private float score;
+    private GameObject rankdata;
+    private List<GameObject> ranklist = new List<GameObject>();
+    public List<string[]> rank = new List<string[]>(); //문제
     
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        
+    }
+    public void EndSetting(){
         totalstage = play.GetComponent<Simonplay>().TotalStage;
         saveUrl = "faulty337.cafe24.com/datasave.php";
+        
+        rankUrl = "faulty337.cafe24.com/RankGet.php";
         date = System.DateTime.Now.ToString("MM/dd/yyyy");
         
         question = extract(play.GetComponent<Simonplay>().Q);
-        print(question);
+        // print(question);
         Compatible = extract(play.GetComponent<Simonplay>().Compatible);
-        print(Compatible);
+        // print(Compatible);
         answer = extract(play.GetComponent<Simonplay>().Answer);
-        print(answer);
+        // print(answer);
         position = extract(play.GetComponent<Simonplay>().position);
-        print(position);
+        // print(position);
         input = extract(play.GetComponent<Simonplay>().input);
-        print(input);
+        // print(input);
         correct = CorrectResult(play.GetComponent<Simonplay>().Answer,play.GetComponent<Simonplay>().input);
-        print(correct);
+        // print(correct);
         reactionTime = extract(play.GetComponent<Simonplay>().reactionTime);
-        print(reactionTime);
-        
-
-        
-        
+        // print(reactionTime);
+        timeObj.text = System.Math.Truncate(play.GetComponent<Simonplay>().totalTime).ToString();
         // timeObj.text = play.GetComponent<Simonplay>().totalTime.ToString();
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
+        StartCoroutine(Rankget());
     }
 
     IEnumerator DataSave()
@@ -61,9 +67,12 @@ public class Simonend : MonoBehaviour
         form.AddField("input", input);
         form.AddField("correct", correct);
         form.AddField("reactionTime", reactionTime);
+        form.AddField("totaltime", System.Math.Truncate(play.GetComponent<Simonplay>().totalTime).ToString());
+        form.AddField("totalscore", totalscore);
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
-        print(webRequest.text);
+        // print(webRequest.text);
+        
     }
     
     public string CorrectResult(string[] ans, string[] input){
@@ -78,14 +87,16 @@ public class Simonend : MonoBehaviour
                 result += ",incorrect";
             }
         }
-        scoreObj.text = (sc*(100/40)).ToString();
+        float score = sc * (100/totalstage);
+        totalscore = System.Convert.ToInt32(score);
+        // System.Math.Truncate(score);
+        scoreObj.text = totalscore.ToString() + " %";
         return result;
     }
 
     public string QuestionResult(string[,] Q){
         string result = "";
         for(int i = 0; i < totalstage; i++){
-            print(Q[i,1]);
             result+= ","+Q[i, 1];
         }
         return result;
@@ -103,4 +114,49 @@ public class Simonend : MonoBehaviour
         return result;
 
     }
+    IEnumerator Rankget()
+    {
+        print("몇번실행되는거야;;");
+        WWWForm form = new WWWForm();
+        form.AddField("id", GameManager.ID);
+        form.AddField("gamename", GameManager.Game);
+        WWW web = new WWW(rankUrl, form);
+        do
+        {
+            yield return null;
+        }
+        while (!web.isDone);
+        if (web.error != null)
+        {
+            Debug.LogError("web.error=" + web.error);
+            yield break;
+        }
+        string[] ex;
+        string[] data = web.text.Split(',');
+        for (int i = 0; i < data.Length-1; i+=2)
+        {
+            ex = new string[2] { data[i], data[i + 1] };
+            rank.Add(ex);
+        }
+        ranklist.Clear();
+        // for(int i = 0; i < rank.Count; i++){
+            
+        //     rankdata = Instantiate(rankObj);
+        //     ranklist.Add(rankdata);
+        //     ranklist[i].SetActive(true);
+        //     ranklist[i].transform.SetParent(rankbase.transform);
+        //     ranklist[i].GetComponent<Rankscript>().RankSetting(i+1, rank[i][0], rank[i][1]);
+        // }
+    }
+    void OnDisable(){   
+
+    }
+    // public void DelRank(){
+    //     for(int i = ranklist.Count-1; i > 0; i--){
+    //         Destroy(ranklist[i]);
+            
+    //     }
+    //     ranklist.Clear();
+        
+    // }
 }

@@ -22,7 +22,7 @@ public class NBackplay : MonoBehaviour
     public List<int> index;
     public int N, RanQ, RanI, Ran;
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         stage = 0;
         TotalStage = manager.GetComponent<NBackManager>().TotalStage;

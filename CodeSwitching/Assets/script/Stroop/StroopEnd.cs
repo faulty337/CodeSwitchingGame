@@ -6,33 +6,33 @@ using UnityEngine.UI;
 public class StroopEnd : MonoBehaviour
 {
     public int[,] data;
-    public int totalscore;
-    public GameObject play;
+    public GameObject play, rankObj, rankbase;
     public Text scoreObj;
     public Text timeObj;
     public string saveUrl;
-    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime;
-    private int time, totalstage;
-    private float score;
+    private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime, rankUrl;
+    private int time, totalstage, score, totalscore;
+    public List<string[]> rank = new List<string[]>(); //문제
     
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         totalstage = play.GetComponent<StroopPlay>().TotalStage;
         saveUrl = "faulty337.cafe24.com/datasave.php";
+        rankUrl = "faulty337.cafe24.com/RankGet.php";
         date = System.DateTime.Now.ToString("MM/dd/yyyy");
         
         answer = extract(play.GetComponent<StroopPlay>().Answer);
-        print(answer);
+        // print(answer);
         input = extract(play.GetComponent<StroopPlay>().input);
-        print(input);
+        // print(input);
         reactionTime = extract(play.GetComponent<StroopPlay>().reactionTime);
-        print(reactionTime);
+        // print(reactionTime);
         correct = CorrectResult(play.GetComponent<StroopPlay>().Answer,play.GetComponent<StroopPlay>().input);
-        print(correct);
+        // print(correct);
         question = extract(play.GetComponent<StroopPlay>().Q);
-        print(question);
-        timeObj.text = play.GetComponent<StroopPlay>().totalTime.ToString();
+        // print(question);
+        timeObj.text = System.Math.Truncate(play.GetComponent<StroopPlay>().totalTime).ToString();
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
     }
@@ -52,9 +52,12 @@ public class StroopEnd : MonoBehaviour
         form.AddField("input", input);
         form.AddField("correct", correct);
         form.AddField("reactionTime", reactionTime);
+        form.AddField("totaltime", System.Math.Truncate(play.GetComponent<StroopPlay>().totalTime).ToString());
+        form.AddField("totalscore", totalscore);
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
-        print(webRequest.text);
+        // print(webRequest.text);
+        StartCoroutine(Rankget());
     }
     
     public string CorrectResult(string[] ans, string[] input){
@@ -62,21 +65,22 @@ public class StroopEnd : MonoBehaviour
         int sc = 0;
         for(int i=0; i<totalstage; i++){
             if(ans[i] == input[i]){
-                
                 result += ",correct";
                 sc++;
             }else{
                 result += ",incorrect";
             }
         }
-        scoreObj.text = (sc*(100/40)).ToString();
+        float score = sc * (100/totalstage);
+        totalscore = System.Convert.ToInt32(score);
+        // System.Math.Truncate(score);
+        scoreObj.text = totalscore.ToString() + " %";
         return result;
     }
 
     public string QuestionResult(string[,] Q){
         string result = "";
         for(int i = 0; i < totalstage; i++){
-            print(Q[i,1]);
             result+= ","+Q[i, 1];
         }
         return result;
@@ -92,6 +96,38 @@ public class StroopEnd : MonoBehaviour
         }
 
         return result;
+
+    }
+        IEnumerator Rankget()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("id", GameManager.ID);
+        form.AddField("gamename", GameManager.Game);
+        WWW web = new WWW(rankUrl, form);
+        do
+        {
+            yield return null;
+        }
+        while (!web.isDone);
+        if (web.error != null)
+        {
+            Debug.LogError("web.error=" + web.error);
+            yield break;
+        }
+        string[] ex;
+        string[] data = web.text.Split(',');
+        for (int i = 0; i < data.Length-1; i+=2)
+        {
+            ex = new string[2] { data[i], data[i + 1] };
+            rank.Add(ex);
+        }
+
+        for(int i = 0; i < rank.Count; i++){
+            var rankdata = Instantiate(rankObj);
+            rankdata.SetActive(true);
+            rankdata.transform.SetParent(rankbase.transform);
+            rankdata.GetComponent<Rankscript>().RankSetting(i+1, rank[i][0], rank[i][1]);
+        }
 
     }
 
