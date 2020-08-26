@@ -56,7 +56,7 @@ public class SimonManager : MonoBehaviour
     public void gameStart()
     {
         PlayPanel.SetActive(true);
-        PlayPanel.GetComponent<Simonplay>().Start();
+        PlayPanel.GetComponent<Simonplay>().GameStart();
     }
 
     public void gameEnd(){

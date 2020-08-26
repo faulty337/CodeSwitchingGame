@@ -6,17 +6,17 @@ using TMPro;
 
 public class NBackplay : MonoBehaviour
 {
-    public GameObject manager, endPannel;
+    public GameObject manager, endPannel, BlockPanel;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
-    public bool start = false; //게임 시작 유무
+    public bool start;//게임 시작 유무
     public int TotalStage; //총 스테이지 길이
-    public float sec; //한 문제당 풀이 시간??
-    public float time, totalTime;//시작후 프레임당 시간
+     //한 문제당 풀이 시간??
+    public float time, totalTime, sec, timestart;//시작후 프레임당 시간
     public float delay;//시작 딜레이
     public TextMeshProUGUI count;
     public Text question;
     public Button yesbutton, nobutton; //화면 비율에 따라 할건지
-    public List<string[]> data, datacopy = new List<string[]>(); //문제
+    public List<string[]> data, datacopy; //문제
     public string[,] Q;  //사용자 입력
     public string[] correct, input, RTime, Answer;
     public List<int> index;
@@ -24,25 +24,43 @@ public class NBackplay : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        // GameStart();
+        //Start에서 초기화 하게 되면 게임 다시 시작시 초기화가 안됨;;
+        
+    }
+
+    public void GameStart(){
+        BlockPanel.SetActive(true);
+        timestart = 0.0f;
         stage = 0;
+        start = false;
+        question.text = "";
         TotalStage = manager.GetComponent<NBackManager>().TotalStage;
         N = manager.GetComponent<NBackManager>().N;
+        totalTime = 0.0f;
         time = 0.0f;
         sec = 1.0f;
         input = new string[TotalStage+1];
         RTime = new string[TotalStage+1];
         Answer = new string[TotalStage + N];
+        StartCoroutine(GameSetting());
+    }
+    
+    IEnumerator GameSetting(){
+        data = new List<string[]>();
+        datacopy = new List<string[]>();
         data = manager.GetComponent<NBackManager>().Q.ConvertAll(s => s) ;
         datacopy = data.ConvertAll(s => s);
+        
         index = new List<int>();
         for(int i = 0; i < data.Count; i++){
             index.Add(i);
         }
-           
         Q = new string[TotalStage+N, 4];//문제 인덱스, 출력할 문제, 문제 한영 여부
-        
-        for(int i = 0; i < N; i++){
-            RanQ = index[Random.Range(0, data.Count)];
+        for(int i = 0; i < N; i++){ //N까지의 문제
+            print("datacopy크기 : "  + datacopy.Count);
+            RanQ = index[Random.Range(0, datacopy.Count)];
+            
             RanI = Random.Range(0, 2);
             Q[i,0] = RanQ.ToString();
             Q[i,1] = datacopy[RanQ][RanI];
@@ -56,22 +74,28 @@ public class NBackplay : MonoBehaviour
         }
         input[stage]="pass";
         RTime[stage] = "1";
+        timestart = 1.0f;
         
+        yield return null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        totalTime+=Time.deltaTime;
-        time += Time.deltaTime; //시간정보 누적
+        totalTime+=Time.deltaTime * timestart;
+        time += Time.deltaTime * timestart; //시간정보 누적
+        // print(stage + "  "+ Q[stage,0] + "  "+ Q[stage,1] + "  "+ Q[stage,2] + "  ");
         if(start){
             if(time > sec){
                 NextQuestion();
+                
             }
         }else{
             if(time > 1.0f){
                 start = true;
+                BlockPanel.SetActive(false);
                 time = 0.0f;
+                FirstQuestion();
             }
         }
 
@@ -104,8 +128,9 @@ public class NBackplay : MonoBehaviour
     }
 
     public void NextQuestion(){
-        question.text = Q[stage, 1];
         stage++;
+        question.text = Q[stage, 1];
+        print(stage + "  " + Q[stage, 1]);
         time=0.0f;
         if(stage > 39){
             manager.GetComponent<NBackManager>().GameEnd();
@@ -119,5 +144,13 @@ public class NBackplay : MonoBehaviour
        input[stage] = BtName;
        RTime[stage] = time.ToString();
        NextQuestion();
+    }
+
+    public void FirstQuestion(){ //맨처음 stage가 0일때
+        question.text = Q[stage, 1];
+        print(0 + "" + Q[stage, 1]);
+        time=0.0f;
+        input[stage]="pass";
+        RTime[stage] = "1";
     }
 }

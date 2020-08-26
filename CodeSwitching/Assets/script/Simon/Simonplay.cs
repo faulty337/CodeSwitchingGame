@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class Simonplay : MonoBehaviour
 {
-    public GameObject manager;
-    public Button Len1Button, Len2Button;
-    public float time, Qtime, totalTime;
+    public GameObject manager, blockPanel;
+    public Text Len1Button, Len2Button;
+    public float time, Qtime, totalTime, timestart;
     public Text Question;
     public bool start = false;
     private List<string[]> Data = new List<string[]>();
@@ -20,18 +20,29 @@ public class Simonplay : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {   
+        alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
+        Len1Button.GetComponent<Text>().text = GameManager.Lan_1;
+        Len2Button.GetComponent<Text>().text = GameManager.Lan_2;
+        direction = new string[2] {"왼쪽","오른쪽"};
+    }
+
+    public void GameStart(){
+        timestart = 0.0f;
+        Question.text = "";
         stage = 0;
         TotalStage = 40;
-        alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
-        Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
+        time = 0.0f;
+        totalTime = 0.0f;
         start = false;
+        StartCoroutine(GameSetting());
+        
+    }
+
+    IEnumerator GameSetting(){
+        Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
+        blockPanel.SetActive(true);
         Qtime = 1.0f;
-        input = new string[TotalStage+1];
-        Answer = new string[TotalStage+1];
-        Compatible = new string[TotalStage+1];
-        position = new string[TotalStage+1];
-        reactionTime = new string[TotalStage+1];
-        direction = new string[2] {"왼쪽","오른쪽"};
+        
         Q = new string[TotalStage+1];
         switch(GameManager.Level){
             case 1:
@@ -46,19 +57,25 @@ public class Simonplay : MonoBehaviour
             default:
                 level = 3;
                 break;
-
         }
-        // Len1Button.GetComponent<Text>().text = GameManager.Len_1;
-        // Len2Button.GetComponent<Text>().text = GameManager.Len_2;
-        startsatting();
-        
+        input = new string[TotalStage+1];
+        Answer = new string[TotalStage+1];
+        Compatible = new string[TotalStage+1];
+        position = new string[TotalStage+1];
+        reactionTime = new string[TotalStage+1];
+        for(int i = 0; i < TotalStage; i++){
+            QuestionMaking(i);
+        }
+        print(Q.Length);
+        timestart = 1.0f;
+        yield return null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        totalTime += Time.deltaTime;
-        time += Time.deltaTime;
+        totalTime += Time.deltaTime * timestart;
+        time += Time.deltaTime * timestart;
         if(start){
             if(time > Qtime){
                 NextQuestion();
@@ -67,83 +84,53 @@ public class Simonplay : MonoBehaviour
         }else{
             if(time > 1.0f){
                 start = true;
+                blockPanel.SetActive(true);
                 startsatting();
             }
         }
-
-        // if(start){
-            
-        // }else{
-        //     timer(time);
-        // }
     }
 
     public void LanButton(int index){
         reactionTime[stage] = time.ToString();
         input[stage] = direction[index];
         NextQuestion();
-        
     }
 
 
 
     public void NextQuestion(){
-        time = 0.0f;
         stage++;
-        input[stage] = "Pass";
-        reactionTime[stage] = "1";
-        int ran = Random.Range(0,Data.Count);
-        int ran2 = Random.Range(0,2);
-        int ran3 = Random.Range(0,2);
-        if(Random.Range(1, 11) > level){
-            Question.alignment = alignment[ran2];
-            position[stage] = direction[ran2];
-            Compatible[stage] = "compatible";
-        }else{
-            Compatible[stage] = "incompatible";
-            if(ran2 == 0){
-                Question.alignment = alignment[1];
-                position[stage] = direction[1];
-            }else{
-                Question.alignment = alignment[0];
-                position[stage] = direction[0];
-            }
-        }
-        
-        Question.text = Data[ran][ran2];
-        Q[stage] = Data[ran][ran2];
-        Answer[stage] = direction[ran2];
+        time = 0.0f;
+        Question.text = Q[stage];
         if(stage >= TotalStage){
             manager.GetComponent<SimonManager>().gameEnd();
         }
     }
-    public void startsatting(){
-        time = 0.0f;
-        input[stage] = "Pass";
-        reactionTime[stage] = "1";
+    public void QuestionMaking(int st){
+        input[st] = "Pass";
+        reactionTime[st] = "1";
         int ran = Random.Range(0,Data.Count);
         int ran2 = Random.Range(0,2);
         int ran3 = Random.Range(0,2);
         if(Random.Range(1, 11) > level){
             Question.alignment = alignment[ran2];
-            position[stage] = direction[ran2];
-            Compatible[stage] = "compatible";
+            position[st] = direction[ran2];
+            Compatible[st] = "compatible";
         }else{
-            Compatible[stage] = "incompatible";
+            Compatible[st] = "incompatible";
             if(ran2 == 0){
                 Question.alignment = alignment[1];
-                position[stage] = direction[1];
+                position[st] = direction[1];
             }else{
                 Question.alignment = alignment[0];
-                position[stage] = direction[0];
+                position[st] = direction[0];
             }
         }
-        
-        Question.text = Data[ran][ran2];
-        Q[stage] = Data[ran][ran2];
-        Answer[stage] = direction[ran2];
-        if(stage >= TotalStage){
-            manager.GetComponent<SimonManager>().gameEnd();
-        }
+        Q[st] = Data[ran][ran2];
+        Answer[st] = direction[ran2];
+    }
+    public void startsatting(){
+        time = 0.0f;
+        Question.text = Q[stage];
     }
 }

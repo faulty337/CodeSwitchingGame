@@ -78,7 +78,7 @@ public class NBackManager : MonoBehaviour
     public void GameStart()
     {
         playpanel.SetActive(true);
-        playpanel.GetComponent<NBackplay>().Start();
+        playpanel.GetComponent<NBackplay>().GameStart();
     }
     public void GameEnd(){
         playpanel.SetActive(false);

@@ -119,7 +119,6 @@ public class NBackend : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
-        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
@@ -128,13 +127,11 @@ public class NBackend : MonoBehaviour
         string[] ex;
         string[] data = web.text.Split(',');
         rank.Clear();
-        print(rank.Count);
         for (int i = 0; i < data.Length-1; i+=2)
         {
             ex = new string[2] { data[i], data[i + 1] };
             rank.Add(ex);
         }
-        print(rank.Count);
 
         for(int i = 0; i < rank.Count; i++){
             // ranklist[i].SetActive(true);
