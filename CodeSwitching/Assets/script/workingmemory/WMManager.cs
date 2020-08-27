@@ -25,7 +25,7 @@ public class WMManager : MonoBehaviour
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
         StartCoroutine(DataGet());
-        switch(GameManager.Level){
+        switch(2){//GameManager.Level
             case 1:
                 level = "1단계에서는 모두 4쌍을";
                 break;

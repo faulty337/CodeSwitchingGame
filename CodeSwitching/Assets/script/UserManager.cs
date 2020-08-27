@@ -30,6 +30,8 @@ public class UserManager : MonoBehaviour
         SetHeight = 9;
         LoginUrl = "faulty337.cafe24.com/Login.php";
         SignUpUrl = "faulty337.cafe24.com/SignUp.php";
+        LogInPanel.SetActive(false);
+        SignUpPanel.SetActive(false);
     }
 
     public void LoginBtn()
@@ -58,6 +60,9 @@ public class UserManager : MonoBehaviour
 
         }
     }
+    public void OpenLoginBtn(){
+        LogInPanel.SetActive(true);
+    }
 
     public void OpenSignUpBtn()
     {
@@ -85,7 +90,6 @@ public class UserManager : MonoBehaviour
         WWW webRequest_signup = new WWW(SignUpUrl, signupform);
         
         yield return webRequest_signup;
-        print(webRequest_signup.text);
         if (webRequest_signup.text == "success")
         {
             SignUpPanel.SetActive(false);

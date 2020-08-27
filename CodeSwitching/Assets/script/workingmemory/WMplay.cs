@@ -121,7 +121,9 @@ public class WMplay : MonoBehaviour
         }
         else
         {
+            blockpanel.SetActive(true);
             Cards[cardnum].GetComponent<CardScript>().CardOpen();
+            yield return new WaitForSeconds(0.5f);
             if (Cards[lastcardnum].GetComponent<CardScript>().cardindex == Cards[cardnum].GetComponent<CardScript>().cardindex)
             {
                 Cards[cardnum].GetComponent<CardScript>().Finsh();
@@ -132,10 +134,11 @@ public class WMplay : MonoBehaviour
                 {
                     manager.GetComponent<WMManager>().GameEnd(failCount, touchCount, time);
                 }
+                blockpanel.SetActive(false);
             }
             else
             {
-                blockpanel.SetActive(true);
+                
                 yield return new WaitForSeconds(0.5f);
                 Cards[cardnum].GetComponent<CardScript>().CardClose();
                 Cards[lastcardnum].GetComponent<CardScript>().CardClose();

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class StroopEnd : MonoBehaviour
 {
     public int[,] data;
-    public GameObject play, rankObj, rankbase;
+    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
+    private List<GameObject> ranklist = new List<GameObject>();
     public Text scoreObj;
     public Text timeObj;
     public string saveUrl;
@@ -17,11 +18,18 @@ public class StroopEnd : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        
+    }
+    public void EndSetting(){
         totalstage = play.GetComponent<StroopPlay>().TotalStage;
         saveUrl = "faulty337.cafe24.com/datasave.php";
         rankUrl = "faulty337.cafe24.com/RankGet.php";
         date = System.DateTime.Now.ToString("MM/dd/yyyy");
-        
+        ranklist.Add(Rank_1);
+        ranklist.Add(Rank_2);
+        ranklist.Add(Rank_3);
+        ranklist.Add(Rank_4);
+        ranklist.Add(Rank_5);
         answer = extract(play.GetComponent<StroopPlay>().Answer);
         // print(answer);
         input = extract(play.GetComponent<StroopPlay>().input);
@@ -98,7 +106,7 @@ public class StroopEnd : MonoBehaviour
         return result;
 
     }
-        IEnumerator Rankget()
+    IEnumerator Rankget()
     {
         WWWForm form = new WWWForm();
         form.AddField("id", GameManager.ID);
@@ -116,17 +124,16 @@ public class StroopEnd : MonoBehaviour
         }
         string[] ex;
         string[] data = web.text.Split(',');
+        rank.Clear();
         for (int i = 0; i < data.Length-1; i+=2)
         {
             ex = new string[2] { data[i], data[i + 1] };
             rank.Add(ex);
         }
-
+        
         for(int i = 0; i < rank.Count; i++){
-            var rankdata = Instantiate(rankObj);
-            rankdata.SetActive(true);
-            rankdata.transform.SetParent(rankbase.transform);
-            rankdata.GetComponent<Rankscript>().RankSetting(i+1, rank[i][0], rank[i][1]);
+            // ranklist[i].SetActive(true);
+            ranklist[i].GetComponent<Rankscript>().RankSetting(i+1, rank[i][0], rank[i][1]);
         }
 
     }

@@ -52,7 +52,7 @@ public class Simonend : MonoBehaviour
         // timeObj.text = play.GetComponent<Simonplay>().totalTime.ToString();
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
-        StartCoroutine(Rankget());
+        
     }
 
     IEnumerator DataSave()
@@ -77,6 +77,7 @@ public class Simonend : MonoBehaviour
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
         // print(webRequest.text);
+        StartCoroutine(Rankget());
         
     }
     

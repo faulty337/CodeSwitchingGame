@@ -20,10 +20,10 @@ public class Simonplay : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {   
-        alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
+        
         Len1Button.GetComponent<Text>().text = GameManager.Lan_1;
         Len2Button.GetComponent<Text>().text = GameManager.Lan_2;
-        direction = new string[2] {"왼쪽","오른쪽"};
+        
     }
 
     public void GameStart(){
@@ -42,8 +42,14 @@ public class Simonplay : MonoBehaviour
         Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
         blockPanel.SetActive(true);
         Qtime = 1.0f;
-        
+        input = new string[TotalStage+1];
+        Answer = new string[TotalStage+1];
+        Compatible = new string[TotalStage+1];
+        position = new string[TotalStage+1];
+        reactionTime = new string[TotalStage+1];
+        alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
         Q = new string[TotalStage+1];
+        direction = new string[2] {"왼쪽","오른쪽"};
         switch(GameManager.Level){
             case 1:
                 level = 3;
@@ -58,12 +64,9 @@ public class Simonplay : MonoBehaviour
                 level = 3;
                 break;
         }
-        input = new string[TotalStage+1];
-        Answer = new string[TotalStage+1];
-        Compatible = new string[TotalStage+1];
-        position = new string[TotalStage+1];
-        reactionTime = new string[TotalStage+1];
+        
         for(int i = 0; i < TotalStage; i++){
+            
             QuestionMaking(i);
         }
         print(Q.Length);
@@ -84,7 +87,7 @@ public class Simonplay : MonoBehaviour
         }else{
             if(time > 1.0f){
                 start = true;
-                blockPanel.SetActive(true);
+                blockPanel.SetActive(false);
                 startsatting();
             }
         }
@@ -102,6 +105,12 @@ public class Simonplay : MonoBehaviour
         stage++;
         time = 0.0f;
         Question.text = Q[stage];
+        if(position[stage] == "왼쪽"){
+            Question.alignment = alignment[0];
+        }else{
+            Question.alignment = alignment[1];
+        }
+        
         if(stage >= TotalStage){
             manager.GetComponent<SimonManager>().gameEnd();
         }
@@ -113,16 +122,17 @@ public class Simonplay : MonoBehaviour
         int ran2 = Random.Range(0,2);
         int ran3 = Random.Range(0,2);
         if(Random.Range(1, 11) > level){
-            Question.alignment = alignment[ran2];
+            // Question.alignment = alignment[ran2];
+            // print("direction :" + direction[ran2] + "  " + ran2);
             position[st] = direction[ran2];
             Compatible[st] = "compatible";
         }else{
             Compatible[st] = "incompatible";
             if(ran2 == 0){
-                Question.alignment = alignment[1];
+                // Question.alignment = alignment[1];
                 position[st] = direction[1];
             }else{
-                Question.alignment = alignment[0];
+                // Question.alignment = alignment[0];
                 position[st] = direction[0];
             }
         }
@@ -131,6 +141,11 @@ public class Simonplay : MonoBehaviour
     }
     public void startsatting(){
         time = 0.0f;
+        if(position[stage] == "왼쪽"){
+            Question.alignment = alignment[0];
+        }else{
+            Question.alignment = alignment[1];
+        }
         Question.text = Q[stage];
     }
 }

@@ -73,13 +73,14 @@ public class StroopManager : MonoBehaviour
     public void gameStart()
     {
         playPanel.SetActive(true);
-        playPanel.GetComponent<StroopPlay>().Start();
+        playPanel.GetComponent<StroopPlay>().StartSetting();
     }
 
     public void gameEnd(){
         playPanel.SetActive(false);
+        blockPanel2.SetActive(true);
         endPanel.SetActive(true);
-        endPanel.GetComponent<StroopEnd>().Start();
+        endPanel.GetComponent<StroopEnd>().EndSetting();
     }
     public void gotohome()
     {
@@ -97,7 +98,6 @@ public class StroopManager : MonoBehaviour
             GameManager.Level +=1;
         }
         retry();
-
     }
 
 }
