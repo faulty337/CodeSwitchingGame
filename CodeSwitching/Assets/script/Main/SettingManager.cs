@@ -39,6 +39,24 @@ public class SettingManager : MonoBehaviour
         GameManager.state = 1;
     }
 
+    void Updata(){
+        #if UNITY_ANDROID
+            if(Input.GetKeyUp(KeyCode.Escape))
+            {
+                switch(GameManager.state){
+                    case 1:
+                        SceneManager.LoadScene("login");
+                        break;
+                    case 2:
+                        gotoPanel("1, 3");
+                        break;
+                    default:
+                        BackButton();
+                        break;
+                }
+            }
+    }
+    #endif
     public void gotoPanel(string index)
     {
         string[] index_p = index.Split(',');
@@ -66,6 +84,7 @@ public class SettingManager : MonoBehaviour
             GameManager.Lan_1 = Lan_1.options[Lan_1.value].text;
             GameManager.Lan_2 = Lan_2.options[Lan_2.value].text;
             gotoPanel("2, 3");
+            Panels[3].GetComponent<SubjectCount>().SubjectSetting();
             GameManager.state = 4;
         }
         
@@ -75,6 +94,7 @@ public class SettingManager : MonoBehaviour
     {
         GameManager.Subject = subject;
         gotoPanel("3, 4");
+        
         GameManager.state = 5;
     }
 
@@ -86,7 +106,6 @@ public class SettingManager : MonoBehaviour
     }
     public void BackButton()
     {
-        print(GameManager.state-1);
         gotoPanel((GameManager.state-1).ToString()+", 1");
         GameManager.state = 2;
         BackBt.SetActive(false);

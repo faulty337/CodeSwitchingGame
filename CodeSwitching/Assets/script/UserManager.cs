@@ -16,8 +16,7 @@ public class UserManager : MonoBehaviour
     public Dropdown newGender;
     public Dropdown newGrade;
     public Dropdown newLanguage;
-    public GameObject SignUpPanel;
-    public GameObject LogInPanel;
+    public GameObject SignUpPanel, LogInPanel, Panel;
 
     public string LoginUrl;
     public string SignUpUrl;
@@ -73,7 +72,10 @@ public class UserManager : MonoBehaviour
     public void SignupBtn()
     {
         StartCoroutine(SignUpCo());
-    }   
+    }
+    public void selectBtn(){
+        Panel.SetActive(true);
+    }
 
     IEnumerator SignUpCo()
     {
@@ -93,7 +95,7 @@ public class UserManager : MonoBehaviour
         if (webRequest_signup.text == "success")
         {
             SignUpPanel.SetActive(false);
-            LogInPanel.SetActive(true);
+            Panel.SetActive(true);
         }
     }
 }

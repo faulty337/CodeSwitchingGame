@@ -49,7 +49,7 @@ public class StroopPlay : MonoBehaviour
         Q = new string[TotalStage+1];
         input = new string[TotalStage+1];
         Answer = new string[TotalStage+1];
-        Qtime = 1.0f;
+        Qtime = 2.0f;
         for(int i = 0; i<TotalStage; i++){
             QuestionMaking(i);
         }

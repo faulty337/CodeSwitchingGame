@@ -8,10 +8,10 @@ public class NBackplay : MonoBehaviour
 {
     public GameObject manager, endPannel, BlockPanel;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
-    public bool start;//게임 시작 유무
+    public bool start, aa;//게임 시작 유무
     public int TotalStage; //총 스테이지 길이
      //한 문제당 풀이 시간??
-    public float time, totalTime, sec, timestart;//시작후 프레임당 시간
+    public float time, totalTime, sec, timestart, eSec;//시작후 프레임당 시간
     public float delay;//시작 딜레이
     public TextMeshProUGUI count;
     public Text question;
@@ -33,13 +33,15 @@ public class NBackplay : MonoBehaviour
         BlockPanel.SetActive(true);
         timestart = 0.0f;
         stage = 0;
+        eSec = 0.2f;
+        aa = false;
         start = false;
         question.text = "";
         TotalStage = manager.GetComponent<NBackManager>().TotalStage;
         N = manager.GetComponent<NBackManager>().N;
         totalTime = 0.0f;
         time = 0.0f;
-        sec = 1.0f;
+        sec = 2.0f;
         input = new string[TotalStage+1];
         RTime = new string[TotalStage+1];
         Answer = new string[TotalStage + N];
@@ -86,10 +88,19 @@ public class NBackplay : MonoBehaviour
         time += Time.deltaTime * timestart; //시간정보 누적
         // print(stage + "  "+ Q[stage,0] + "  "+ Q[stage,1] + "  "+ Q[stage,2] + "  ");
         if(start){
-            if(time > sec){
-                NextQuestion();
-                
+            if(aa){
+                if(time > sec){
+                    NextQuestion();
+                    aa = false;
+                }
+                else{
+                    if(time > eSec)
+                    question.text = " ";
+                    time = 0.0f;
+                    aa = true;
+                }
             }
+            
         }else{
             if(time > 1.0f){
                 start = true;

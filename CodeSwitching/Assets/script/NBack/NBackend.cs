@@ -119,6 +119,7 @@ public class NBackend : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
+        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
