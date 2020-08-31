@@ -80,8 +80,8 @@ public class NBackend : MonoBehaviour
             }
         }
         float score;
-        score = sc * (100/totalstage);
-        totalscore = System.Convert.ToInt32(score);
+        score = sc * (100/(float)totalstage);
+        totalscore = (int)score;
         // System.Math.Truncate(score);
         scoreObj.text = totalscore.ToString() + " %";
         return result;
@@ -103,7 +103,6 @@ public class NBackend : MonoBehaviour
         {
             result += "," + data[i];
         }
-
         return result;
 
     }
@@ -113,6 +112,7 @@ public class NBackend : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("id", GameManager.ID);
         form.AddField("gamename", GameManager.Game);
+        form.AddField("Level", GameManager.Level);
         WWW web = new WWW(rankUrl, form);
         do
         {

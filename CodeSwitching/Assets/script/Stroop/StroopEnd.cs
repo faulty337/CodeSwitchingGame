@@ -79,8 +79,8 @@ public class StroopEnd : MonoBehaviour
                 result += ",incorrect";
             }
         }
-        float score = sc * (100/totalstage);
-        totalscore = System.Convert.ToInt32(score);
+        float score = sc * (100/(float)totalstage);
+        totalscore = (int)score;
         // System.Math.Truncate(score);
         scoreObj.text = totalscore.ToString() + " %";
         return result;
@@ -111,6 +111,7 @@ public class StroopEnd : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("id", GameManager.ID);
         form.AddField("gamename", GameManager.Game);
+        form.AddField("Level", GameManager.Level);
         WWW web = new WWW(rankUrl, form);
         do
         {

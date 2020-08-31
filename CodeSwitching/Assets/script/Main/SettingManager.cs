@@ -78,7 +78,6 @@ public class SettingManager : MonoBehaviour
     public void LenguageSetting()
     {
         if(Lan_1.options[Lan_1.value].text == "언어1" || Lan_2.options[Lan_2.value].text=="언어2"){
-            PopupB.gameObject.SetActive(true);
             Popup("두 언어 모두 선택해주세요.");
         }else{
             GameManager.Lan_1 = Lan_1.options[Lan_1.value].text;
@@ -113,6 +112,7 @@ public class SettingManager : MonoBehaviour
     public void Popup(string text)
 
     {
+        PopupB.gameObject.SetActive(true);
         PopupText.text = text;
         if(PopupStatus == true) //중복재생방지
         {
@@ -121,9 +121,7 @@ public class SettingManager : MonoBehaviour
         StartCoroutine(fadeoutplay(2.0f, 1.0f, 0.0f));    //코루틴 실행
     }
 
-    IEnumerator fadeoutplay(float FadeTime, float start, float end)
-
-    {
+    IEnumerator fadeoutplay(float FadeTime, float start, float end){
         PopupStatus = true;
         Color PopColor = PopupB.color;
         Color textColor = PopupText.color;

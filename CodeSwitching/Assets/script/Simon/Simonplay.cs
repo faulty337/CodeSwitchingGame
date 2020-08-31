@@ -7,11 +7,11 @@ public class Simonplay : MonoBehaviour
 {
     public GameObject manager, blockPanel;
     public Text Len1Button, Len2Button;
-    public float time, Qtime, totalTime, timestart;
-    public Text Question;
-    public bool start = false;
+    public float time, Qtime, totalTime, timestart, empty, startTime;
+    public Text Question, Score;
+    public bool start, QInterval, first;
     private List<string[]> Data = new List<string[]>();
-    private int stage, level;
+    private int stage, level, ScoreCount;
     public int TotalStage;
     public string[] input, Answer, Compatible, position, reactionTime, Q, direction;
     
@@ -28,12 +28,18 @@ public class Simonplay : MonoBehaviour
 
     public void GameStart(){
         timestart = 0.0f;
+        empty = 0.2f;
         Question.text = "";
+        Score.text = "0";
+        ScoreCount = 0;
+        QInterval = true;
+        first = false;
         stage = 0;
         TotalStage = 40;
         time = 0.0f;
         totalTime = 0.0f;
         start = false;
+        startTime = 1.0f;
         StartCoroutine(GameSetting());
         
     }
@@ -41,7 +47,7 @@ public class Simonplay : MonoBehaviour
     IEnumerator GameSetting(){
         Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
         blockPanel.SetActive(true);
-        Qtime = 1.0f;
+        Qtime = 2.0f;
         input = new string[TotalStage+1];
         Answer = new string[TotalStage+1];
         Compatible = new string[TotalStage+1];
@@ -79,16 +85,36 @@ public class Simonplay : MonoBehaviour
     {
         totalTime += Time.deltaTime * timestart;
         time += Time.deltaTime * timestart;
-        if(start){
-            if(time > Qtime){
-                NextQuestion();
-                time = 0.0f;
+        if(first){
+            if(QInterval){
+                if(time > empty){
+                    NextQuestion();
+                    time = 0.0f;
+                    QInterval = false;
+                }
+            }else{
+                if(time > Qtime){
+                    print("쉬는타임");
+                    Question.text = " ";
+                    time = 0.0f;
+                    QInterval = true;
+                }
             }
+            
         }else{
-            if(time > 1.0f){
-                start = true;
-                blockPanel.SetActive(false);
-                startsatting();
+            if(start){
+                if(time > Qtime){
+                    first = true;
+                    time = 0.0f;
+                    Question.text = "";
+                }
+            }else{
+                if(time > startTime){
+                    blockPanel.SetActive(false);
+                    startsatting();
+                    start = true;
+                    time = 0.0f;
+                }
             }
         }
     }
@@ -96,6 +122,10 @@ public class Simonplay : MonoBehaviour
     public void LanButton(int index){
         reactionTime[stage] = time.ToString();
         input[stage] = direction[index];
+        if(direction[index] == Answer[stage]){
+            ScoreCount++;
+            Score.text = ScoreCount.ToString();
+        }
         NextQuestion();
     }
 

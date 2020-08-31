@@ -8,19 +8,18 @@ public class NBackplay : MonoBehaviour
 {
     public GameObject manager, endPannel, BlockPanel;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
-    public bool start, aa;//게임 시작 유무
+    public bool start, QInterval, first;//게임 시작 유무
     public int TotalStage; //총 스테이지 길이
      //한 문제당 풀이 시간??
-    public float time, totalTime, sec, timestart, eSec;//시작후 프레임당 시간
+    public float time, totalTime, QTime, timestart, empty, startTime;//시작후 프레임당 시간
     public float delay;//시작 딜레이
-    public TextMeshProUGUI count;
-    public Text question;
+    public Text question, Score;
     public Button yesbutton, nobutton; //화면 비율에 따라 할건지
     public List<string[]> data, datacopy; //문제
     public string[,] Q;  //사용자 입력
     public string[] correct, input, RTime, Answer;
     public List<int> index;
-    public int N, RanQ, RanI, Ran;
+    public int N, RanQ, RanI, Ran, successCount;
     // Start is called before the first frame update
     public void Start()
     {
@@ -31,17 +30,21 @@ public class NBackplay : MonoBehaviour
 
     public void GameStart(){
         BlockPanel.SetActive(true);
+        Score.text = "0";
         timestart = 0.0f;
+        successCount = 0;
+        first = false;
         stage = 0;
-        eSec = 0.2f;
-        aa = false;
+        empty = 0.2f;
+        startTime = 1.0f;
+        QInterval = true;
         start = false;
         question.text = "";
         TotalStage = manager.GetComponent<NBackManager>().TotalStage;
         N = manager.GetComponent<NBackManager>().N;
         totalTime = 0.0f;
         time = 0.0f;
-        sec = 2.0f;
+        QTime = 2.0f;
         input = new string[TotalStage+1];
         RTime = new string[TotalStage+1];
         Answer = new string[TotalStage + N];
@@ -60,7 +63,6 @@ public class NBackplay : MonoBehaviour
         }
         Q = new string[TotalStage+N, 4];//문제 인덱스, 출력할 문제, 문제 한영 여부
         for(int i = 0; i < N; i++){ //N까지의 문제
-            print("datacopy크기 : "  + datacopy.Count);
             RanQ = index[Random.Range(0, datacopy.Count)];
             
             RanI = Random.Range(0, 2);
@@ -87,27 +89,35 @@ public class NBackplay : MonoBehaviour
         totalTime+=Time.deltaTime * timestart;
         time += Time.deltaTime * timestart; //시간정보 누적
         // print(stage + "  "+ Q[stage,0] + "  "+ Q[stage,1] + "  "+ Q[stage,2] + "  ");
-        if(start){
-            if(aa){
-                if(time > sec){
+        if(first){
+            if(QInterval){
+                if(time > empty){
                     NextQuestion();
-                    aa = false;
+                    QInterval = false;
                 }
-                else{
-                    if(time > eSec)
+            }else{
+                if(time > QTime){
                     question.text = " ";
                     time = 0.0f;
-                    aa = true;
+                    QInterval = true;
+                }
+            }
+        }else{
+            if(start){
+                if(time > QTime){
+                    first = true;
+                    time = 0.0f;
+                    question.text = "";
+                }
+            }else{
+                if(time > startTime){
+                    start = true;
+                    BlockPanel.SetActive(false);
+                    time = 0.0f;
+                    FirstQuestion();
                 }
             }
             
-        }else{
-            if(time > 1.0f){
-                start = true;
-                BlockPanel.SetActive(false);
-                time = 0.0f;
-                FirstQuestion();
-            }
         }
 
     }
@@ -154,6 +164,10 @@ public class NBackplay : MonoBehaviour
     {
        input[stage] = BtName;
        RTime[stage] = time.ToString();
+       if(BtName == Answer[stage]){
+            successCount++;
+            Score.text = successCount.ToString();
+       }
        NextQuestion();
     }
 

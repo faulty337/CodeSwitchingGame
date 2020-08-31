@@ -5,22 +5,23 @@ using UnityEngine;
 
 public class StroopPlay : MonoBehaviour
 {
-    public Text Question;
+    public Text Question, Score;
     public GameObject manager, blockPanel;
     public string[] color = {"빨강", "노랑", "초록", "파랑"};
     public string[] colorstr = {"빨간", "노란", "초록", "파란"};
     public string[] colorNum;
     public int[,] QuestionIndex;
-    public int stage, TotalStage;
+    public int stage, TotalStage, ScoreCount;
     private int level;
     public List<string[]> Data = new List<string[]>();
     public string[] reactionTime, Q, input, Answer;
-    public float time, Qtime, totalTime;
-    public bool start = false;
+    public float time, QTime, totalTime,timeStart, startTime, empty;
+    public bool start, QInterval, first;
     // Start is called before the first frame update
     public void Start()
     {
-        
+        QTime = 2.0f;
+        startTime = 1.0f;
     }
 
     public void StartSetting(){
@@ -30,16 +31,22 @@ public class StroopPlay : MonoBehaviour
         
     }
     IEnumerator GameSetting(){
-        colorNum[0] = "<color=#bf2836>";
-        colorNum[0] = "<color=#f3c500>";
-        colorNum[0] = "<color=#0c7b3f>";
-        colorNum[0] = "<color=#004e9e>";
+        colorNum[0] = "<color=#bf2836>";//빨강
+        colorNum[1] = "<color=#f3c500>";//노랑
+        colorNum[2] = "<color=#0c7b3f>";//초록
+        colorNum[3] = "<color=#004e9e>";//파랑
         TotalStage = 40;
+        timeStart = 0.0f;
         QuestionIndex = new int[TotalStage+1, 2];
         Question.text = "";
+        Score.text = "";
+        ScoreCount = 0;
         totalTime = 0.0f;
         time = 0.0f;
         start = false;
+        first = false;
+        QInterval = true;
+        empty = 0.2f;
         stage = 0;
         level = GameManager.Level;
         //{"<color=#bf2836>", "<color=#f3c500>", "<color=#0c7b3f>", "<color=#004e9e>"};
@@ -49,31 +56,49 @@ public class StroopPlay : MonoBehaviour
         Q = new string[TotalStage+1];
         input = new string[TotalStage+1];
         Answer = new string[TotalStage+1];
-        Qtime = 2.0f;
+        
         for(int i = 0; i<TotalStage; i++){
             QuestionMaking(i);
         }
-
+        timeStart = 1.0f;
         yield return null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        totalTime += Time.deltaTime;
-        if(start){
-            time += Time.deltaTime;
-            if(time > Qtime){
-                NextQuestion();
-                time = 0.0f;
+        totalTime += Time.deltaTime * timeStart;
+        time += Time.deltaTime * timeStart;
+        if(first){
+            if(QInterval){
+                if(time > empty){
+                    NextQuestion();
+                    QInterval = false;
+                    time = 0.0f;
+                }
+            }else{
+                if(time > QTime){
+                    Question.text = " ";
+                    time = 0.0f;
+                    QInterval = true;
+                }
             }
         }else{
-            if(totalTime > 1.0f){
-                start = true;
-                blockPanel.SetActive(false);
-                FirstQuestion();
-                totalTime = 0.0f;
+            if(start){
+                if(time > QTime){
+                    first = true;
+                    time = 0.0f;
+                    Question.text = "";
+                }
+            }else{
+                if(time > startTime){
+                    blockPanel.SetActive(false);
+                    FirstQuestion();
+                    start = true;
+                    time = 0.0f;
+                }
             }
+            
         }
 
     }
@@ -81,13 +106,17 @@ public class StroopPlay : MonoBehaviour
     public void ButtonIndex(int index){
         input[stage] = color[index];
         reactionTime[stage] = time.ToString();
+        if(color[index] == Answer[stage]){
+            ScoreCount++;
+            Score.text = ScoreCount.ToString();
+        }
         time = 0.0f;
         NextQuestion();
     }
 
     public void NextQuestion(){
         stage++;
-        Question.text = colorNum[QuestionIndex[stage, 0]]+colorstr[QuestionIndex[stage, 1]]+Q[stage]+"</color>";
+        Question.text = colorNum[QuestionIndex[stage, 0]]+" " +colorstr[QuestionIndex[stage, 1]]+Q[stage]+"</color>";
         if(stage >= TotalStage){
             manager.GetComponent<StroopManager>().gameEnd();
         }
@@ -121,7 +150,7 @@ public class StroopPlay : MonoBehaviour
         }
     }
     public void FirstQuestion(){
-        Question.text = colorNum[QuestionIndex[stage, 0]]+colorstr[QuestionIndex[stage, 1]]+Q[stage]+"</color>";
+        Question.text = colorNum[QuestionIndex[stage, 0]]+" "+colorstr[QuestionIndex[stage, 1]]+Q[stage]+"</color>";//QuestionIndex[stage, 0]
         if(stage >= TotalStage){
             manager.GetComponent<StroopManager>().gameEnd();
         }

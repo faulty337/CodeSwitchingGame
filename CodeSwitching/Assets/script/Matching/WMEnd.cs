@@ -81,6 +81,7 @@ public class WMEnd : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("id", GameManager.ID);
         form.AddField("gamename", GameManager.Game);
+        form.AddField("Level", GameManager.Level);
         WWW web = new WWW(rankUrl, form);
         do
         {

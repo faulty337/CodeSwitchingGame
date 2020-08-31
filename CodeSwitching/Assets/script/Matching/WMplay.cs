@@ -26,13 +26,14 @@ public class WMplay : MonoBehaviour
 
     public void StartSetting(){
         blockpanel.SetActive(true);
+        passCount = 0;
         StartCoroutine(GameSetting());
     }
 
     IEnumerator GameSetting(){
         totaltime = 0.0f;
         startTime = 0.0f;
-        passCount = 0;
+        
         touchCount = 0;
         cardMargin = 10;
         cardW = (int)pfcard.GetComponent<RectTransform>().rect.width;
@@ -95,9 +96,10 @@ public class WMplay : MonoBehaviour
             card.transform.SetParent(playPanel.transform);
             card.GetComponent<CardScript>().cardnum = i;
             card.GetComponent<CardScript>().cardindex = ranIndex[i];
-            card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
+            int ran = Random.Range(0, Q[ranIndex[i]].Count);
+            card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][ran];
             question[i] = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
-            Q[ranIndex[i]].Remove(card.GetComponent<CardScript>().Cardstr);
+            Q[ranIndex[i]].RemoveAt(ran);
             
             card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, height);
             card.SetActive(true);
@@ -155,11 +157,11 @@ public class WMplay : MonoBehaviour
             }
             else
             {
-                
-                yield return new WaitForSeconds(0.5f);
+                blockpanel.SetActive(false);
+                yield return new WaitForSeconds(1.0f);
                 Cards[cardnum].GetComponent<CardScript>().CardClose();
                 Cards[lastcardnum].GetComponent<CardScript>().CardClose();
-                blockpanel.SetActive(false);
+                
                 failCount++;
             }
 

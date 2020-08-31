@@ -16,6 +16,7 @@ public class PlayState : MonoBehaviour
     private int[] gamecount;
     public Text idoutput;
     private string getUrl;
+    private string[] data;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,13 +43,24 @@ public class PlayState : MonoBehaviour
     }
 
     public void Countadd(GameObject parent, GameObject Point, int Count){
+        int TCount = Count;
         if(Count > 20){
-            Count = 20;
-        }
-        for(int i = 0; i < Count; i++){
+            TCount = 20;
+            for(int i = 0; i < TCount; i++){
             var point = Instantiate(Point);
             point.transform.SetParent(parent.transform);
+            if(i == TCount-1){
+                point.transform.GetChild(0).GetComponent<Text>().text = Count.ToString();
+            }
         }
+        }else{
+            for(int i = 0; i < TCount; i++){
+                var point = Instantiate(Point);
+                point.transform.SetParent(parent.transform);
+            
+            }
+        }
+        
     }
     IEnumerator DataGet(){
         WWWForm form = new WWWForm();
@@ -64,7 +76,7 @@ public class PlayState : MonoBehaviour
             Debug.LogError("web.error=" + web.error);
             yield break;
         }
-        string[] data = web.text.Split(',');
+        data = web.text.Split(',');
         for (int i = 1; i < data.Length; i++)
         {
             gamecount[i-1] = int.Parse(data[i]);

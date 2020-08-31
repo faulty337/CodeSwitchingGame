@@ -27,7 +27,7 @@ public class WMManager : MonoBehaviour
         StartCoroutine(DataGet());
         switch(GameManager.Level){//GameManager.Level
             case 1:
-                level = "1단계에서는 모두 4쌍을";
+                level = "1단계에서는 모두 3쌍을";
                 break;
             case 2:
                 level = "2단계에서는 모두 6쌍을";
@@ -65,7 +65,7 @@ public class WMManager : MonoBehaviour
     }
 
     public void nextLevel(){
-        if(GameManager.Level>3){
+        if(GameManager.Level<3){
             GameManager.Level +=1;
         }
         retry();
