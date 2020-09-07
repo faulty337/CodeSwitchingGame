@@ -47,16 +47,20 @@ public class PlayState : MonoBehaviour
         if(Count > 20){
             TCount = 20;
             for(int i = 0; i < TCount; i++){
-            var point = Instantiate(Point);
-            point.transform.SetParent(parent.transform);
+            var point = Instantiate(Point, parent.transform);
+           
             if(i == TCount-1){
-                point.transform.GetChild(0).GetComponent<Text>().text = Count.ToString();
+                if(Count >= 100){
+                    point.transform.GetChild(0).GetComponent<Text>().text = "99+";
+                }else{
+                    point.transform.GetChild(0).GetComponent<Text>().text = Count.ToString();
+                }
+                
             }
         }
         }else{
             for(int i = 0; i < TCount; i++){
-                var point = Instantiate(Point);
-                point.transform.SetParent(parent.transform);
+                var point = Instantiate(Point, parent.transform);
             
             }
         }

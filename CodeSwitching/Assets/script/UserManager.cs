@@ -88,8 +88,8 @@ public class UserManager : MonoBehaviour
         print(newGrade.options[newGrade.value].text);
         print(newLanguage.options[newLanguage.value].text);
         if(New_IDIputField.text == "" || New_PassInputField.text == "" 
-        || New_AgeInputField.text == ""  || newGender.options[newGender.value].text == "성별" 
-        || newGrade.options[newGrade.value].text == "학력" || newLanguage.options[newLanguage.value].text == "모국어"){
+        || New_AgeInputField.text == ""  || newGender.options[newGender.value].text == "성별*" 
+        || newGrade.options[newGrade.value].text == "학력*" || newLanguage.options[newLanguage.value].text == "모국어*"){
             Popup("비어있는 칸이 존재합니다. 빈칸을 채워주세요.");
 
         }else{

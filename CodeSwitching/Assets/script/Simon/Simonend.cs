@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Simonend : MonoBehaviour
 {
     public int totalscore;
-    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
+    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5, NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
     public Text scoreObj;
     public Text timeObj;
@@ -51,6 +51,11 @@ public class Simonend : MonoBehaviour
         timeObj.text = System.Math.Truncate(play.GetComponent<Simonplay>().totalTime).ToString();
         // timeObj.text = play.GetComponent<Simonplay>().totalTime.ToString();
         // question = extract(play.GetComponent<NBackplay>().Q[]);
+        if(GameManager.Level >= 3){
+            NextButton.gameObject.SetActive(false);
+        }else{
+            NextButton.gameObject.SetActive(true);
+        }
         StartCoroutine(DataSave());
         
     }

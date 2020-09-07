@@ -53,6 +53,8 @@ public class NBackManager : MonoBehaviour
         blockPanel.SetActive(true);
         WWWForm form = new WWWForm();
         form.AddField("input_Subject", GameManager.Subject);//
+        form.AddField("Lan1", GameManager.Lan_1);
+        form.AddField("Lan2", GameManager.Lan_2);
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -90,7 +92,7 @@ public class NBackManager : MonoBehaviour
     public void gotohome()
     {
         SceneManager.LoadScene("Main");
-        GameManager.state = 1;
+        GameManager.state = 3;
     }
 
     public void retry(){

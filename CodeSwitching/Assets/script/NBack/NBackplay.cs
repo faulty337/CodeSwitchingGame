@@ -7,6 +7,7 @@ using TMPro;
 public class NBackplay : MonoBehaviour
 {
     public GameObject manager, endPannel, BlockPanel;
+    public Button NoBtn, YesBtn;
     public int stage; //현재 스테이지, 시간에 따라 스테이지 변화
     public bool start, QInterval, first;//게임 시작 유무
     public int TotalStage; //총 스테이지 길이
@@ -14,7 +15,6 @@ public class NBackplay : MonoBehaviour
     public float time, totalTime, QTime, timestart, empty, startTime;//시작후 프레임당 시간
     public float delay;//시작 딜레이
     public Text question, Score;
-    public Button yesbutton, nobutton; //화면 비율에 따라 할건지
     public List<string[]> data, datacopy; //문제
     public string[,] Q;  //사용자 입력
     public string[] correct, input, RTime, Answer;
@@ -94,6 +94,8 @@ public class NBackplay : MonoBehaviour
                 if(time > empty){
                     NextQuestion();
                     QInterval = false;
+                    NoBtn.interactable = true;
+                    YesBtn.interactable = true;
                 }
             }else{
                 if(time > QTime){
@@ -158,17 +160,25 @@ public class NBackplay : MonoBehaviour
         }
         input[stage]="pass";
         RTime[stage] = "1";
+        
+        
     }
 
     public void NBackButton(string BtName)
     {
-       input[stage] = BtName;
-       RTime[stage] = time.ToString();
-       if(BtName == Answer[stage]){
-            successCount++;
-            Score.text = successCount.ToString();
-       }
-       NextQuestion();
+        input[stage] = BtName;
+        RTime[stage] = time.ToString();
+        if(BtName == Answer[stage]){
+                successCount++;
+                Score.text = successCount.ToString();
+        }
+        question.text = "";
+        QInterval = true;
+        time = 0.0f;
+        first = true;
+        NoBtn.interactable = false;
+        YesBtn.interactable = false;
+    //    NextQuestion();
     }
 
     public void FirstQuestion(){ //맨처음 stage가 0일때

@@ -36,6 +36,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\script\Complex\ComplexEnd.cs" />
+     <Compile Include="Assets\script\Complex\ComplexManager.cs" />
+     <Compile Include="Assets\script\Complex\ComplexPlay.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
      <Compile Include="Assets\script\Main\PlayState.cs" />
      <Compile Include="Assets\script\Main\SettingManager.cs" />

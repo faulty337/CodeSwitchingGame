@@ -5,11 +5,10 @@ using UnityEngine.UI;
 
 public class WMEnd : MonoBehaviour
 {
-    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
+    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5, NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
     public List<string> rank = new List<string>();
     public Text Time;
-    public Button nextButton;
     private int touch, totalCard;
     private float TotalTime;
     // Start is called before the first frame update
@@ -33,9 +32,10 @@ public class WMEnd : MonoBehaviour
         question = extract(play.GetComponent<WMplay>().question);
         TotalTime = Mathf.Round(play.GetComponent<WMplay>().totaltime*10)*0.1f;
         Time.text = this.TotalTime.ToString() + "초";
-        if(GameManager.Level >= 3)
-        {
-            nextButton.interactable = false;
+        if(GameManager.Level >= 3){
+            NextButton.gameObject.SetActive(false);
+        }else{
+            NextButton.gameObject.SetActive(true);
         }
         StartCoroutine(DataSave());
     }

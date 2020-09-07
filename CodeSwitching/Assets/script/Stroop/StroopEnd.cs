@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StroopEnd : MonoBehaviour
 {
     public int[,] data;
-    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
+    public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5, NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
     public Text scoreObj;
     public Text timeObj;
@@ -42,6 +42,11 @@ public class StroopEnd : MonoBehaviour
         // print(question);
         timeObj.text = System.Math.Truncate(play.GetComponent<StroopPlay>().totalTime).ToString();
         // question = extract(play.GetComponent<NBackplay>().Q[]);
+        if(GameManager.Level >= 3){
+            NextButton.gameObject.SetActive(false);
+        }else{
+            NextButton.gameObject.SetActive(true);
+        }
         StartCoroutine(DataSave());
     }
 
@@ -65,6 +70,7 @@ public class StroopEnd : MonoBehaviour
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
         // print(webRequest.text);
+        
         StartCoroutine(Rankget());
     }
     

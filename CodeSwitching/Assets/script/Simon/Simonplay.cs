@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Simonplay : MonoBehaviour
 {
     public GameObject manager, blockPanel;
+    public Button RightBtn, LeftBtn;
     public Text Len1Button, Len2Button;
     public float time, Qtime, totalTime, timestart, empty, startTime;
     public Text Question, Score;
@@ -19,10 +20,7 @@ public class Simonplay : MonoBehaviour
     
     // Start is called before the first frame update
     public void Start()
-    {   
-        
-        Len1Button.GetComponent<Text>().text = GameManager.Lan_1;
-        Len2Button.GetComponent<Text>().text = GameManager.Lan_2;
+    {  
         
     }
 
@@ -91,10 +89,11 @@ public class Simonplay : MonoBehaviour
                     NextQuestion();
                     time = 0.0f;
                     QInterval = false;
+                    RightBtn.interactable = true;
+                    LeftBtn.interactable = true;
                 }
             }else{
                 if(time > Qtime){
-                    print("쉬는타임");
                     Question.text = " ";
                     time = 0.0f;
                     QInterval = true;
@@ -126,7 +125,13 @@ public class Simonplay : MonoBehaviour
             ScoreCount++;
             Score.text = ScoreCount.ToString();
         }
-        NextQuestion();
+        Question.text = "";
+        QInterval = true;
+        time = 0.0f;
+        first = true;
+        RightBtn.interactable = false;
+        LeftBtn.interactable = false;
+        // NextQuestion();
     }
 
 

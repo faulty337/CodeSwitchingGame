@@ -36,7 +36,12 @@ public class SettingManager : MonoBehaviour
         Panels.Add(Setting_1);
         Panels.Add(SubjectChoice);
         Panels.Add(Setting_Level);
-        GameManager.state = 1;
+        if(GameManager.state == 3){
+            gotoPanel("0,1");
+            
+        }
+        GameManager.state = 3;
+        
     }
 
     void Updata(){
@@ -72,7 +77,7 @@ public class SettingManager : MonoBehaviour
         GameManager.Game = game;
         BackBt.SetActive(true);
         Setting_1.SetActive(true);
-        GameManager.state = 3;
+        GameManager.state = 4;
     }
 
     public void LenguageSetting()
@@ -84,7 +89,7 @@ public class SettingManager : MonoBehaviour
             GameManager.Lan_2 = Lan_2.options[Lan_2.value].text;
             gotoPanel("2, 3");
             Panels[3].GetComponent<SubjectCount>().SubjectSetting();
-            GameManager.state = 4;
+            GameManager.state = 5;
         }
         
     }
@@ -94,18 +99,18 @@ public class SettingManager : MonoBehaviour
         GameManager.Subject = subject;
         gotoPanel("3, 4");
         
-        GameManager.state = 5;
+        GameManager.state = 6;
     }
 
     public void LevelSetting(int level)
     {
         GameManager.Level = level;
-        GameManager.state = 6; //게임 상태
+        GameManager.state = 7; //게임 상태
         SceneManager.LoadScene(GameManager.Game);
     }
     public void BackButton()
     {
-        gotoPanel((GameManager.state-1).ToString()+", 1");
+        gotoPanel((GameManager.state-2).ToString()+", 1");
         GameManager.state = 2;
         BackBt.SetActive(false);
     }

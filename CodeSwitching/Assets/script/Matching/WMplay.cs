@@ -35,7 +35,7 @@ public class WMplay : MonoBehaviour
         startTime = 0.0f;
         
         touchCount = 0;
-        cardMargin = 10;
+        cardMargin = 20;
         cardW = (int)pfcard.GetComponent<RectTransform>().rect.width;
         cardH = (int)pfcard.GetComponent<RectTransform>().rect.height;
         switch (GameManager.Level)
@@ -51,16 +51,19 @@ public class WMplay : MonoBehaviour
             case 3:
                 x = 4;
                 y = 4;
+                cardMargin = 10;
                 break;
         }
         //화면 비율 다시 맞추기(카드 각 공간은 고정으로)
         DistanceW = cardW + cardMargin;
         DistanceH = cardH + cardMargin;
-        width = (-Screen.width/2) + ((Screen.width - ((cardW * x) + (cardMargin * (x - 1))))/2)+cardW/2;
-        height = (Screen.height / 2) - ((Screen.height - ((cardH * y) + (cardMargin * (y - 1))))/2)-cardH/2;
+        // width = (-Screen.width/2) + ((Screen.width - ((cardW * x) + (cardMargin * (x - 1))))/2)+cardW/2;
+        width = -(((cardW * x) + (cardMargin * (x - 1)))/2)+(cardW/2);
+        // height = (Screen.height / 2) - ((Screen.height - ((cardH * y) + (cardMargin * (y - 1))))/2)-cardH/2;
+        height = (((cardH * y) + (cardMargin * (y - 1)))/2)-(cardH/2) - 30;
         totalCard = ((x * y) / 2)*2;
         question = new string[totalCard];
-        Data= new List<string[]>();
+        Data = new List<string[]>();
         Data = manager.GetComponent<WMManager>().Data.ConvertAll(s => s);
         ranIndex = new List<int>();
         index = new List<int>();
@@ -92,8 +95,8 @@ public class WMplay : MonoBehaviour
         Cards = new List<GameObject>();
         for (int i = 0; i < totalCard; i++)
         {
-            var card = Instantiate(pfcard);
-            card.transform.SetParent(playPanel.transform);
+            var card = Instantiate(pfcard, transform);
+            // card.transform.SetParent(playPanel.transform);
             card.GetComponent<CardScript>().cardnum = i;
             card.GetComponent<CardScript>().cardindex = ranIndex[i];
             int ran = Random.Range(0, Q[ranIndex[i]].Count);
@@ -103,6 +106,8 @@ public class WMplay : MonoBehaviour
             
             card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, height);
             card.SetActive(true);
+            
+            print(card.GetComponent<RectTransform>().rect.height);
             w = w + DistanceW;
             if ((i+1)%x == 0)
             {
@@ -157,10 +162,11 @@ public class WMplay : MonoBehaviour
             }
             else
             {
-                blockpanel.SetActive(false);
+                
                 yield return new WaitForSeconds(1.0f);
                 Cards[cardnum].GetComponent<CardScript>().CardClose();
                 Cards[lastcardnum].GetComponent<CardScript>().CardClose();
+                blockpanel.SetActive(false);
                 
                 failCount++;
             }

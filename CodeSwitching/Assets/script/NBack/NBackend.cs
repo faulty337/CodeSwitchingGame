@@ -6,6 +6,7 @@ public class NBackend : MonoBehaviour
 {
     public int[,] data;
     public GameObject play, rankbase, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
+    public GameObject NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
     public Text scoreObj;
     public Text timeObj;
@@ -43,6 +44,11 @@ public class NBackend : MonoBehaviour
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
         timeObj.text = System.Math.Truncate(play.GetComponent<NBackplay>().totalTime).ToString() + " s";
+        if(GameManager.Level >= 3){
+            NextButton.gameObject.SetActive(false);
+        }else{
+            NextButton.gameObject.SetActive(true);
+        }
     }
 
     IEnumerator DataSave()

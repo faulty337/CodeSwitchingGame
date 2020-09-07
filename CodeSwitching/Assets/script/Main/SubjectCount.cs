@@ -54,18 +54,14 @@ public class SubjectCount : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
-        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
             yield break;
         }
         string[] data = web.text.Split(',');
-        print(data.Length);
-        print(Subjects.Count);
         for (int i = 1; i < data.Length; i++)
         {
-            print(data[i]);
             Subjects[i-1].text = data[i];
             if(data[i] == "0"){
                 countobj[i-1].SetActive(false);

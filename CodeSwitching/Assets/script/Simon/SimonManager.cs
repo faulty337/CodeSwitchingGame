@@ -32,8 +32,8 @@ public class SimonManager : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("input_Subject", GameManager.Subject); 
-        form.AddField("Lan1", "");
-        form.AddField("Lan2", "");
+        form.AddField("Lan1", GameManager.Lan_1);
+        form.AddField("Lan2", GameManager.Lan_2);
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -68,8 +68,9 @@ public class SimonManager : MonoBehaviour
     }
 
     public void gotohome(){
-        GameManager.state = 2;
+        
         SceneManager.LoadScene("Main");
+        GameManager.state = 3;
     }
     public void retry(){
         blockPanel2.SetActive(false);

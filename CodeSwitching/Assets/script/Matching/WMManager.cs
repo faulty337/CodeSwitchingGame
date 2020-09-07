@@ -76,6 +76,8 @@ public class WMManager : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("input_Subject", GameManager.Subject);
+        form.AddField("Lan1", GameManager.Lan_1);
+        form.AddField("Lan2", GameManager.Lan_2);
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -99,7 +101,7 @@ public class WMManager : MonoBehaviour
     public void gotohome()
     {
         SceneManager.LoadScene("Main");
-        GameManager.state = 2;
+        GameManager.state = 3;
     }
 
     
