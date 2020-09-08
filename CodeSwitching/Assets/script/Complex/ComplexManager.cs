@@ -62,7 +62,7 @@ public class ComplexManager : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
-        blockPanel.SetActive(false);
+        
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
@@ -76,14 +76,14 @@ public class ComplexManager : MonoBehaviour
             Data.Add(ex);
             
         }
-
+        blockPanel.SetActive(false);
 
     }
 
     public void GameStart()
     {
         playpanel.SetActive(true);
-        playpanel.GetComponent<ComplexPlay>().StartSetting(15, 3);
+        playpanel.GetComponent<ComplexPlay>().StartSetting(25, 5);
     }
     public void GameEnd(){
         playpanel.SetActive(false);

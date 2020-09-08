@@ -7,33 +7,38 @@ public class ComplexPlay : MonoBehaviour
 {
     public GameObject manager, playPanel, Blockpanel;
     public GameObject Lan1, Lan2, pfcard;
-    public Text Lan1Btn, Lan2Btn;
-    public string[] Q;
+    public Button Lan1Btn, Lan2Btn;
+    public Text Lan1text, Lan2text;
+    public string[] Q, Input;
     public Text question;
-    public int totalStage;
-    private int stageSize, stageIndex, state, level, cardMargin, cardW, cardH, DistanceW, DistanceH, width, height;
+    public int totalStage, cardnum;
+    public string cardstr;
+    private int stageIndex, state, level, cardMargin, cardW, cardH, DistanceW, DistanceH, width, height, cardTouchCount;
     public float startTime, QTime, totalTime, timeStart;
     private float time, empty;
     private bool first, start, QInterval;
-    private List<string[]> Data;
+    private List<string[]> Data, cardlist, cardlistcopy;
+    private List<GameObject> Cards;
+    private List<string> Cardstr;
     // Start is called before the first frame update
     void Start()
     {
-        cardMargin = 20;
+        cardMargin = 10;
         cardW = (int)pfcard.GetComponent<RectTransform>().rect.width;
         cardH = (int)pfcard.GetComponent<RectTransform>().rect.height;
         DistanceW = cardW + cardMargin;
         DistanceH = cardH + cardMargin;
-        width = -(((cardW * 4) + (cardMargin * (4 - 1)))/2)+(cardW/2);
-        height = (((cardH * 4) + (cardMargin * (4 - 1)))/2)-(cardH/2);
+        width = -(((cardW * 4) + (cardMargin * (4 - 1))) / 2) + (cardW / 2);
+        height = (((cardH * 4) + (cardMargin * (4 - 1))) / 2) - (cardH / 2);
 
     }
 
-    public void StartSetting(int stageSize, int level){
+    public void StartSetting(int stageSize, int level)
+    {
         Blockpanel.SetActive(true);
         Lan1.gameObject.SetActive(false);
         Lan2.gameObject.SetActive(false);
-        this.stageSize = stageSize;
+        totalStage = stageSize;
         this.level = level;
         time = 0.0f;
         stageIndex = 0;
@@ -46,20 +51,21 @@ public class ComplexPlay : MonoBehaviour
         state = 0;
         QInterval = true;
         start = false;
-        Q = new string[stageSize];
+        Input = new string[totalStage + 1];
+        Q = new string[totalStage];
         Data = new List<string[]>();
         StartCoroutine(GameSetting());
     }
 
-    IEnumerator GameSetting(){
+    IEnumerator GameSetting()
+    {
         Data = manager.GetComponent<ComplexManager>().Data.ConvertAll(s => s);
-        for(int i = 0; i<Data.Count; i++){
-            print(Data[i][0]);
-            print(Data[i][1]);
-            print(Data[i][2]);
-        }
-        for(int i = 0; i < Q.Length; i++){
-            Q[i] = Data[Random.Range(0, Data.Count)][0];
+        cardlist = Data.ConvertAll(s => s);
+        for (int i = 0; i < Q.Length; i++)
+        {
+            int ran = Random.Range(0, cardlist.Count);
+            Q[i] = cardlist[ran][0];
+            cardlist.RemoveAt(ran);
         }
         timeStart = 1.0f;
         yield return null;
@@ -68,12 +74,18 @@ public class ComplexPlay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        totalTime += Time.deltaTime;
-        time += Time.deltaTime;
-        if(first){
-            if(QInterval){
-                if(time > empty){
-                    switch(state){
+        totalTime += Time.deltaTime * timeStart;
+        time += Time.deltaTime * timeStart;
+        if (first)
+        {
+            if (QInterval)
+            {
+                if (time > empty)
+                {
+                    Lan1.gameObject.SetActive(false);
+                    Lan2.gameObject.SetActive(false);
+                    switch (state)
+                    {
                         case 0:
                             NextQuestion_Memory();
                             break;
@@ -81,102 +93,192 @@ public class ComplexPlay : MonoBehaviour
                             NextQuestion_AC();
                             break;
                         case 2:
+                            StartCoroutine(CardSetting());
                             break;
 
                     }
                     QInterval = false;
                 }
-            }else{
-                if(time > QTime){
+            }
+            else
+            {
+                if (time > QTime)
+                {
                     question.text = " ";
                     time = 0.0f;
                     QInterval = true;
                 }
             }
-        }else{
-            if(start){
-                if(time > QTime){
+        }
+        else
+        {
+            if (start)
+            {
+                if (time > QTime)
+                {
                     first = true;
                     time = 0.0f;
                     question.text = "";
                 }
-            }else{
-                if(time > startTime){
+            }
+            else
+            {
+                if (time > startTime)
+                {
                     start = true;
                     Blockpanel.SetActive(false);
-                    NextQuestion_Memory();
+                    FirstQuestion();
                     time = 0.0f;
                 }
             }
-            
+
         }
     }
-    public void ButtonTouch(){
+    public void ButtonTouch()
+    {
         // state = 1;
+        if (stageIndex != 0 && (stageIndex+1) % level == 0)
+        {
+            state = 2;
+        }
+        else
+        {
+            state = 0;
+        }
         time = 0.0f;
+        Lan1Btn.interactable = false;
+        Lan2Btn.interactable = false;
+        Lan1.gameObject.SetActive(false);
+        Lan2.gameObject.SetActive(false);
+        question.text = "";
+        QInterval = true;
 
     }
 
-    public void NextQuestion_Memory(){
+    public void NextQuestion_Memory()
+    {
         stageIndex++;
         question.text = Q[stageIndex];
-        Lan1.gameObject.SetActive(false);
-        Lan2.gameObject.SetActive(false);
+        
         state = 1;
         time = 0.0f;
     }
-    public void FirstQuestion(){
+    public void FirstQuestion()
+    {
         question.text = Q[stageIndex];
-        Lan1.gameObject.SetActive(false);
-        Lan2.gameObject.SetActive(false);
+
         state = 1;
         time = 0.0f;
     }
-    public void NextQuestion_AC(){
+    public void NextQuestion_AC()
+    {
         int ran = Random.Range(0, Data.Count);
         question.text = Data[ran][1];
-        if(Random.Range(0,2) > 0){
-            Lan1Btn.text = Data[Random.Range(0, Data.Count)][2];
-            Lan2Btn.text = Data[ran][2];
-        }else{
-            Lan2Btn.text = Data[Random.Range(0, Data.Count)][2];
-            Lan1Btn.text = Data[ran][2];
+        if (Random.Range(0, 2) > 0)
+        {
+            Lan1text.text = Data[Random.Range(0, Data.Count)][2];
+            Lan2text.text = Data[ran][2];
         }
-        
+        else
+        {
+            Lan2text.text = Data[Random.Range(0, Data.Count)][2];
+            Lan1text.text = Data[ran][2];
+        }
+
         Lan1.gameObject.SetActive(true);
         Lan2.gameObject.SetActive(true);
-        if(stageIndex % level == 0){
+        Lan1Btn.interactable = true;
+        Lan2Btn.interactable = true;
+        if (stageIndex != 0 && (stageIndex+1) % level == 0)
+        {
+            print(stageIndex);
             state = 2;
-        }else{
+        }
+        else
+        {
             state = 0;
         }
         time = 0.0f;
     }
 
-    void CardSetting(){
+    IEnumerator CardSetting()
+    {
+        timeStart = 0.0f;
+        Blockpanel.SetActive(true);
+        Cardstr = new List<string>();
+        cardlistcopy = cardlist.ConvertAll(s=>s);
+        // print(stageIndex + "  " + level);
+        for (int i = stageIndex - (level-1); i <= stageIndex; i++)
+        {
+            Cardstr.Add(Q[i]);
+        }
+        for (int i = level; i <= 16; i++)
+        {
+            int ran = Random.Range(0, cardlistcopy.Count);
+            Cardstr.Add(cardlistcopy[ran][0]);
+            cardlistcopy.RemoveAt(ran);
+        }
+        Cards = new List<GameObject>();
+        int w = width;
+        int h = height;
+        // for(int i = 0; i < Cardstr.Count; i++){
+        //     print("CardStr : " + Cardstr[i]);
+        // }
+        // for(int i = 0; i < Q.Length; i++){
+        //     print("Q : " + Q[i]);
+        // }
         for (int i = 0; i < 16; i++)
         {
             var card = Instantiate(pfcard, transform);
-            // card.transform.SetParent(playPanel.transform);
-            card.GetComponent<CardScript>().cardnum = i;
-            // card.GetComponent<CardScript>().cardindex = ranIndex[i];
-            // int ran = Random.Range(0, Q[ranIndex[i]].Count);
-            // card.GetComponent<CardScript>().Cardstr = Q[ranIndex[i]][ran];
+            // card.transform.SetParent(CardParent.transform);
+            card.GetComponent<AnswerCard>().cardnum = i;
+            int ran = Random.Range(0, Cardstr.Count);
+            card.GetComponent<AnswerCard>().cardStr = Cardstr[ran];
             // question[i] = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
-            // Q[ranIndex[i]].RemoveAt(ran);
-            
-            card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, height);
+            Cardstr.RemoveAt(ran);
+
+            card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, h);
             card.SetActive(true);
-            
-            print(card.GetComponent<RectTransform>().rect.height);
+
+            // print(card.GetComponent<RectTransform>().rect.height);
             w = w + DistanceW;
-            if ((i+1)%x == 0)
+            if ((i + 1) % 4 == 0)
             {
-                height = height - DistanceH;
+                h = h - DistanceH;
                 w = width;
             }
             Cards.Add(card);
         }
+        
+        Blockpanel.SetActive(false);
+        yield return null;
+    }
+
+    public void CardTouch(int cardIndex, string cardStr)
+    {
+        Input[cardTouchCount] = cardStr;
+        cardTouchCount++;
+        if (cardTouchCount % level == 0)
+        {
+            if(cardTouchCount >= totalStage){
+                manager.GetComponent<ComplexManager>().GameEnd();
+            }else{
+                CardClear();
+                state = 0;
+                time = 0.0f;
+                timeStart = 1.0f;
+            }
+        }
+        
+    }
+
+    public void CardClear()
+    {
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            Cards[i].SetActive(false);
+        }
+        Cards.Clear();
     }
 
 

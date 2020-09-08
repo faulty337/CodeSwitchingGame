@@ -8,7 +8,7 @@ public class CardScript : MonoBehaviour
 {
     public int rotatespeed = 2;
     public int cardindex, cardnum;
-    public GameObject manager, playmanager, blockPanel;
+    public GameObject manager, playmanager;
     
     public Text Cardtext;
     public string Cardstr ="카드";
