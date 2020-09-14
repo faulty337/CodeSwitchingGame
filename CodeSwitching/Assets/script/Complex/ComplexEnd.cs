@@ -9,7 +9,7 @@ public int[,] data;
     public GameObject play, rankbase, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
     public GameObject NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
-    public Text scoreObj;
+    public Text SequenceObj, WordObj;
     public Text timeObj;
     private string saveUrl, rankUrl;
     private string Lan_1, Lan_2, id, Subject, Game, date, question, AcWord, input, AcSequence;
@@ -24,7 +24,7 @@ public int[,] data;
 
     public void EndSetting(int level){
         this.level = level;
-        totalstage = play.GetComponent<NBackplay>().TotalStage;
+        totalstage = play.GetComponent<ComplexPlay>().totalStage;
         saveUrl = "faulty337.cafe24.com/datasave.php";
         rankUrl = "faulty337.cafe24.com/RankGet.php";
         date = System.DateTime.Now.ToString("MM/dd/yyyy");
@@ -34,12 +34,13 @@ public int[,] data;
         ranklist.Add(Rank_4);
         ranklist.Add(Rank_5);
         // print(answer);
-        input = extract(play.GetComponent<NBackplay>().input);
+        input = extract(play.GetComponent<ComplexPlay>().Input);
         question = extract(play.GetComponent<ComplexPlay>().Q);
+        CorrectResult(play.GetComponent<ComplexPlay>().Q, play.GetComponent<ComplexPlay>().Input);
         // print(question);
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
-        timeObj.text = System.Math.Truncate(play.GetComponent<NBackplay>().totalTime).ToString() + " s";
+        timeObj.text = System.Math.Truncate(play.GetComponent<ComplexPlay>().totalTime).ToString() + " s";
         if(GameManager.Level >= 3){
             NextButton.gameObject.SetActive(false);
         }else{
@@ -72,9 +73,15 @@ public int[,] data;
         int sc = 0;
         int word = 0;
         string result = "";
-        
+        for(int i = 0; i < totalstage; i++){
+            print("Q : " + Q[i]);
+            print("input : " + input[i]);
+        }
+        print(input.Length + "  " + Q.Length);
         for(int i=0; i<totalstage; i++){
-            for(int j = level*(i/level); j < level*(i/level+1); i++){
+            print("i : " +i);
+            for(int j = level*(i/level); j < level*((i/level)+1); j++){
+                print("j : " +j);
                 if(input[i] == Q[j]){
                     if(i == System.Array.IndexOf(Q, input[i])){
                         sc++;
@@ -84,14 +91,12 @@ public int[,] data;
                 }
             }
         }
-        
-        int ACWord;
-        int ACSequence;
-        ACWord = (int) (word * (100/(float)totalstage));
-        ACSequence = (int)(sc * (100/(float)totalstage));
+        AcWord = ((int) (word * (100/(float)totalstage))).ToString();
+        AcSequence = ((int)(sc * (100/(float)totalstage))).ToString();
         // totalscore = (int)score;
         // System.Math.Truncate(score);
-        // scoreObj.text = totalscore.ToString() + " %";
+        SequenceObj.text = AcSequence+ " %";
+        WordObj.text = AcWord + " %";
         return result;
     }
 

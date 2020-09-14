@@ -27,9 +27,10 @@ public class StroopPlay : MonoBehaviour
         
     }
 
-    public void StartSetting(){
+    public void StartSetting(int level, int totalStage){
+        TotalStage = totalStage;
         blockPanel.SetActive(true);
-        
+        this.level = level;
         StartCoroutine(GameSetting());
         
     }
@@ -38,11 +39,11 @@ public class StroopPlay : MonoBehaviour
         colorNum[1] = "<color=#f3c500>";//노랑
         colorNum[2] = "<color=#0c7b3f>";//초록
         colorNum[3] = "<color=#004e9e>";//파랑
-        TotalStage = 40;
+        
         timeStart = 0.0f;
         QuestionIndex = new int[TotalStage+1, 2];
         Question.text = "";
-        Score.text = "";
+        Score.text = "0";
         ScoreCount = 0;
         totalTime = 0.0f;
         time = 0.0f;
@@ -51,7 +52,7 @@ public class StroopPlay : MonoBehaviour
         QInterval = true;
         empty = 0.2f;
         stage = 0;
-        level = GameManager.Level;
+        
         //{"<color=#bf2836>", "<color=#f3c500>", "<color=#0c7b3f>", "<color=#004e9e>"};
         Data = manager.GetComponent<StroopManager>().Data.ConvertAll(s => s);
         
@@ -86,6 +87,10 @@ public class StroopPlay : MonoBehaviour
             }else{
                 if(time > QTime){
                     Question.text = " ";
+                    if(Answer[stage] == "Pass" && input[stage] == "Pass"){
+                        ScoreCount++;
+                        Score.text = ScoreCount.ToString();
+                    }
                     time = 0.0f;
                     QInterval = true;
                     
@@ -96,6 +101,10 @@ public class StroopPlay : MonoBehaviour
                 if(time > QTime){
                     first = true;
                     time = 0.0f;
+                    if(Answer[stage] == "Pass" && input[stage] == "Pass"){
+                        ScoreCount++;
+                        Score.text = ScoreCount.ToString();
+                    }
                     Question.text = "";
                 }
             }else{

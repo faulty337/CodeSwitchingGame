@@ -10,10 +10,10 @@ public class ComplexManager : MonoBehaviour
     public GameObject panel;
     public List<string[]> Data; //문제
     public int[] data;  //사용자 입력
-    public int N;
+    public int level;
     public Text Description;
 
-    private string level; 
+    private string leveltext; 
 
     public GameObject playpanel, endpanel, selectpanel, blockPanel, blockPanel2;
     public string getUrl;
@@ -23,39 +23,62 @@ public class ComplexManager : MonoBehaviour
         Data = new List<string[]>();
         getUrl = "faulty337.cafe24.com/dataget.php";
         StartCoroutine(DataGet());
-        N = 2;
-        TotalStage = 40;
         data = new int[TotalStage];
         selectpanel.SetActive(true);
         playpanel.SetActive(false);
         endpanel.SetActive(false);
         blockPanel.SetActive(false);
         blockPanel2.SetActive(false);
+        ScreenSetting();
+        LevelSetting(GameManager.Level);
+    }
+    void ScreenSetting(){
         switch(GameManager.Level){
             case 1:
-                level = "총 3개";
+                leveltext = "총 3개";
                 break;
             case 2:
-                level = "총 5개";
+                leveltext = "총 5개";
                 break;
             case 3:
-                level = "총 7개";
+                leveltext = "총 7개";
                 break;
             default:
-                level = "총 3개";
+                leveltext = "총 3개";
                 break;
         }
-        Description.text = "\"기억하기\"와 \"의미판단\"하기 두가지 과제를 같이 진행합니다. \n1. "+GameManager.Lan_1+" 단어가 제시되면 기억하세요. \n2. "+GameManager.Lan_2+" 단어가 제시되면 의미판단을 해야 합니다(의미상 가까운 단어 선택).\n3.<기억(RECALL)> 단계에서, 깅거하고 있는 "+GameManager.Lan_1+"단어를 고르세요.\n\n"+GameManager.Level+"단계에서는 한번에 총 "+level+" 단어를 기억하고, 총 "+level+" 단어의 의미판단을 수행해야 합니다.\n\n게임설명을 \"꼭\" 보세요.";
+        Description.text = "\"기억하기\"와 \"의미판단\"하기 두가지 과제를 같이 진행합니다. \n1. "+GameManager.Lan_1+" 단어가 제시되면 기억하세요. \n2. "+GameManager.Lan_2+" 단어가 제시되면 의미판단을 해야 합니다(의미상 가까운 단어 선택).\n3.<기억(RECALL)> 단계에서, 기억하고 있는 "+GameManager.Lan_1+"단어를 고르세요.\n\n"+GameManager.Level+"단계에서는 한번에 "+leveltext+" 단어를 기억하고, "+leveltext+" 단어의 의미판단을 수행해야 합니다.\n\n게임설명을 \"꼭\" 보세요.";
+    }
+
+    void LevelSetting(int level){
+        switch(level){
+            case 1:
+                this.level = 3;
+                break;
+            case 2:
+                this.level = 5;
+                break;
+            case 3:
+                this.level = 7;
+                break;
+            default:
+                this.level = 3;
+                break;
+        }
     }
 
     IEnumerator DataGet()
     {
         blockPanel.SetActive(true);
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", "School");//GameManager.Subject
-        form.AddField("game", "Complex");
-        form.AddField("Lan1", "한국어");//GameManager.Lan_1
-        form.AddField("Lan2", "영어");//GameManager.Lan_2
+        form.AddField("input_Subject", GameManager.Subject);
+        form.AddField("game", GameManager.Game);
+        form.AddField("Lan1", GameManager.Lan_1);//
+        form.AddField("Lan2", GameManager.Lan_2);//
+        // form.AddField("input_Subject", "School");
+        // form.AddField("game", "Complex");
+        // form.AddField("Lan1", "한국어");//
+        // form.AddField("Lan2", "영어");//
         WWW web = new WWW(getUrl, form);
         do
         {
@@ -83,13 +106,13 @@ public class ComplexManager : MonoBehaviour
     public void GameStart()
     {
         playpanel.SetActive(true);
-        playpanel.GetComponent<ComplexPlay>().StartSetting(25, 5);
+        playpanel.GetComponent<ComplexPlay>().StartSetting(level*5, level);
     }
     public void GameEnd(){
         playpanel.SetActive(false);
         blockPanel2.SetActive(true);
         endpanel.SetActive(true);
-        // endpanel.GetComponent<ComplexPlay>().EndSetting();
+        endpanel.GetComponent<ComplexEnd>().EndSetting(level);
     }
 
     public void gotohome()
@@ -102,6 +125,8 @@ public class ComplexManager : MonoBehaviour
         blockPanel2.SetActive(false);
         endpanel.SetActive(false);
         selectpanel.SetActive(true);
+        ScreenSetting();
+        LevelSetting(GameManager.Level);
     }
 
     public void nextLevel(){

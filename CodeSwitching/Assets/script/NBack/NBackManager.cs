@@ -23,7 +23,7 @@ public class NBackManager : MonoBehaviour
         Q = new List<string[]>();
         getUrl = "faulty337.cafe24.com/dataget.php";
         StartCoroutine(DataGet());
-        N = 2;
+        N = GameManager.Level;
         TotalStage = 40;
         data = new int[TotalStage];
         selectpanel.SetActive(true);
@@ -31,21 +31,26 @@ public class NBackManager : MonoBehaviour
         endpanel.SetActive(false);
         blockPanel.SetActive(false);
         blockPanel2.SetActive(false);
-        switch(GameManager.Level){
+        ScreenSetting(GameManager.Level);
+    }
+    
+    public void ScreenSetting(int level){
+        
+        switch(level){
             case 1:
-                level = "1단계에서는 바로 전에";
+                this.level = "1단계에서는 바로 전에";
                 break;
             case 2:
-                level = "2단계에서는 두번 전에";
+                this.level = "2단계에서는 두번 전에";
                 break;
             case 3:
-                level = "1단계에서는 세번 전에";
+                this.level = "3단계에서는 세번 전에";
                 break;
             default:
-                level = "1단계에서는 바로 전에";
+                this.level = "1단계에서는 바로 전에";
                 break;
         }
-        Description.text = "뜻이 같은 단어가 나오면 \"YES\" \n\n"+level+" 제시된 단어와 지금 제시된 단어가 뜻이 같을 때, YES를 누르세요. 그렇지 않은 경우엔 모두 NO를 누르세요.\n\n게임설명을 \"꼭\" 보세요.";
+        Description.text = "뜻이 같은 단어가 나오면 \"YES\" \n\n"+this.level+" 제시된 단어와 지금 제시된 단어가 뜻이 같을 때, YES를 누르세요. 그렇지 않은 경우엔 모두 NO를 누르세요.\n\n게임설명을 \"꼭\" 보세요.";
     }
 
     IEnumerator DataGet()
@@ -80,7 +85,7 @@ public class NBackManager : MonoBehaviour
     public void GameStart()
     {
         playpanel.SetActive(true);
-        playpanel.GetComponent<NBackplay>().GameStart();
+        playpanel.GetComponent<NBackplay>().GameStart(GameManager.Level, TotalStage);
     }
     public void GameEnd(){
         playpanel.SetActive(false);
@@ -99,10 +104,11 @@ public class NBackManager : MonoBehaviour
         blockPanel2.SetActive(false);
         endpanel.SetActive(false);
         selectpanel.SetActive(true);
+        ScreenSetting(GameManager.Level);
     }
 
     public void nextLevel(){
-        if(GameManager.Level>3){
+        if(GameManager.Level<3){
             GameManager.Level +=1;
         }
         retry();

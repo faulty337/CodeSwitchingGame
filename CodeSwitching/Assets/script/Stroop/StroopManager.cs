@@ -12,35 +12,40 @@ public class StroopManager : MonoBehaviour
     public List<string[]> Data = new List<string[]>();
     public Text Description;
     // Start is called before the first frame update
-    private string level;
+    private string leveltext;
     void Start()
     {
         getUrl = "faulty337.cafe24.com/dataget.php";
         selectPanel.SetActive(true);
         endPanel.SetActive(false);
         playPanel.SetActive(false);
+        ScreenSetting(GameManager.Level);
         StartCoroutine(DataGet());
-        switch(GameManager.Level){
-            case 1:
-                level = "1단계에서는 제시되는 모든 단어의 색깔을 고르세요.";
-                break;
-            case 2:
-                level = "2단계에서는 "+GameManager.Lan_2+" 단어 색깔만 고르세요. "+GameManager.Lan_1+" 단어는 PASS를 누르세요.";
-                break;
-            case 3:
-                level = "3단계에서는 "+GameManager.Lan_1+" 단어 색깔만 고르세요. "+GameManager.Lan_2+" 단어는 PASS를 누르세요.";
-                break;
-            default:
-                level = "1단계에서는 제시되는 모든 단어의 색깔을 고르세요.";
-                break;
-        }
-        Description.text = "단어가 어떤 색깔로 \"쓰여져\" 있는지 고르세요.\n "+level+"\n\n게임설명을 \"꼭\" 보세요.";
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ScreenSetting(int level){
+        switch(level){
+            case 1:
+                leveltext = "1단계에서는 제시되는 모든 단어의 색깔을 고르세요.";
+                break;
+            case 2:
+                leveltext = "2단계에서는 "+GameManager.Lan_2+" 단어 색깔만 고르세요. "+GameManager.Lan_1+" 단어는 PASS 하세요.";
+                break;
+            case 3:
+                leveltext = "3단계에서는 "+GameManager.Lan_1+" 단어 색깔만 고르세요. "+GameManager.Lan_2+" 단어는 PASS 하세요.";
+                break;
+            default:
+                leveltext = "1단계에서는 제시되는 모든 단어의 색깔을 고르세요.";
+                break;
+        }
+        Description.text = "단어가 어떤 색깔로 \"쓰여져\" 있는지 고르세요.\n "+leveltext+"\n\n게임설명을 \"꼭\" 보세요.";
     }
 
 
@@ -75,7 +80,7 @@ public class StroopManager : MonoBehaviour
     public void gameStart()
     {
         playPanel.SetActive(true);
-        playPanel.GetComponent<StroopPlay>().StartSetting();
+        playPanel.GetComponent<StroopPlay>().StartSetting(GameManager.Level, 40);
     }
 
     public void gameEnd(){
@@ -93,10 +98,11 @@ public class StroopManager : MonoBehaviour
         blockPanel2.SetActive(false);
         endPanel.SetActive(false);
         selectPanel.SetActive(true);
+        ScreenSetting(GameManager.Level);
     }
 
     public void nextLevel(){
-        if(GameManager.Level>3){
+        if(GameManager.Level<3){
             GameManager.Level +=1;
         }
         retry();

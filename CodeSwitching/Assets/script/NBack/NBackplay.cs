@@ -28,7 +28,7 @@ public class NBackplay : MonoBehaviour
         
     }
 
-    public void GameStart(){
+    public void GameStart(int level, int totalStage){
         BlockPanel.SetActive(true);
         Score.text = "0";
         timestart = 0.0f;
@@ -40,8 +40,8 @@ public class NBackplay : MonoBehaviour
         QInterval = true;
         start = false;
         question.text = "";
-        TotalStage = manager.GetComponent<NBackManager>().TotalStage;
-        N = manager.GetComponent<NBackManager>().N;
+        TotalStage = totalStage;
+        N = level;
         totalTime = 0.0f;
         time = 0.0f;
         QTime = 2.0f;

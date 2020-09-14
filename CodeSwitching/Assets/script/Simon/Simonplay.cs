@@ -24,7 +24,7 @@ public class Simonplay : MonoBehaviour
         
     }
 
-    public void GameStart(){
+    public void GameStart(int level, int totalStage){
         timestart = 0.0f;
         empty = 0.2f;
         Question.text = "";
@@ -33,11 +33,25 @@ public class Simonplay : MonoBehaviour
         QInterval = true;
         first = false;
         stage = 0;
-        TotalStage = 40;
+        TotalStage = totalStage;
         time = 0.0f;
         totalTime = 0.0f;
         start = false;
         startTime = 1.0f;
+        switch(level){
+            case 1:
+                this.level = 3;
+                break;
+            case 2:
+                this.level = 5;
+                break;
+            case 3:
+                this.level = 7;
+                break;
+            default:
+                this.level = 3;
+                break;
+        }
         StartCoroutine(GameSetting());
         
     }
@@ -54,20 +68,7 @@ public class Simonplay : MonoBehaviour
         alignment = new TextAnchor[2] {TextAnchor.MiddleLeft, TextAnchor.MiddleRight};
         Q = new string[TotalStage+1];
         direction = new string[2] {"왼쪽","오른쪽"};
-        switch(GameManager.Level){
-            case 1:
-                level = 3;
-                break;
-            case 2:
-                level = 5;
-                break;
-            case 3:
-                level = 7;
-                break;
-            default:
-                level = 3;
-                break;
-        }
+        
         
         for(int i = 0; i < TotalStage; i++){
             

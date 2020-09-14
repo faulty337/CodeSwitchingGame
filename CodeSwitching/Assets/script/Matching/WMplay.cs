@@ -24,21 +24,11 @@ public class WMplay : MonoBehaviour
         
     }
 
-    public void StartSetting(){
+    public void StartSetting(int level){
         blockpanel.SetActive(true);
         passCount = 0;
-        StartCoroutine(GameSetting());
-    }
-
-    IEnumerator GameSetting(){
-        totaltime = 0.0f;
-        startTime = 0.0f;
-        
-        touchCount = 0;
-        cardMargin = 20;
-        cardW = (int)pfcard.GetComponent<RectTransform>().rect.width;
-        cardH = (int)pfcard.GetComponent<RectTransform>().rect.height;
-        switch (GameManager.Level)
+        count.text = "0";
+        switch (level)
         {
             case 1 :
                 x = 3;
@@ -54,6 +44,18 @@ public class WMplay : MonoBehaviour
                 cardMargin = 10;
                 break;
         }
+        StartCoroutine(GameSetting());
+    }
+
+    IEnumerator GameSetting(){
+        totaltime = 0.0f;
+        startTime = 0.0f;
+        
+        touchCount = 0;
+        cardMargin = 20;
+        cardW = (int)pfcard.GetComponent<RectTransform>().rect.width;
+        cardH = (int)pfcard.GetComponent<RectTransform>().rect.height;
+        
         //화면 비율 다시 맞추기(카드 각 공간은 고정으로)
         DistanceW = cardW + cardMargin;
         DistanceH = cardH + cardMargin;

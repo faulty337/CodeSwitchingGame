@@ -14,7 +14,7 @@ public class WMManager : MonoBehaviour
     public float playtime;
 
     public Text Description;
-    private string level;
+    private string leveltext;
 
 
     void Start()
@@ -25,28 +25,32 @@ public class WMManager : MonoBehaviour
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
         StartCoroutine(DataGet());
-        switch(GameManager.Level){//GameManager.Level
+        
+
+    }
+
+    public void ScreenSetting(int level){
+        switch(level){//GameManager.Level
             case 1:
-                level = "1단계에서는 모두 3쌍을";
+                leveltext = "1단계에서는 모두 3쌍을";
                 break;
             case 2:
-                level = "2단계에서는 모두 6쌍을";
+                leveltext = "2단계에서는 모두 6쌍을";
                 break;
             case 3:
-                level = "3단계에서는 모두 8쌍을";
+                leveltext = "3단계에서는 모두 8쌍을";
                 break;
             default:
-                level = "1단계에서는 모두 4쌍을";
+                leveltext = "1단계에서는 모두 4쌍을";
                 break;
         }
-        Description.text = "서로 같은 뜻의 단어쌍을 찾으세요. "+level+" 찾으면 됩니다.\n\n게임설명을 \"꼭\" 보세요.";
-
+        Description.text = "서로 같은 뜻의 단어쌍을 찾으세요. "+leveltext+" 찾으면 됩니다.\n\n게임설명을 \"꼭\" 보세요.";
     }
 
     public void GameStart()
     {
         PlayPanel.SetActive(true);
-        PlayPanel.GetComponent<WMplay>().StartSetting();
+        PlayPanel.GetComponent<WMplay>().StartSetting(GameManager.Level);
         SelectPanel.SetActive(false);
     }
 
@@ -62,6 +66,7 @@ public class WMManager : MonoBehaviour
         blockPanel_2.SetActive(false);
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
+        ScreenSetting(GameManager.Level);
     }
 
     public void nextLevel(){

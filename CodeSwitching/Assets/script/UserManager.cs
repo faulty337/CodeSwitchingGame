@@ -71,11 +71,13 @@ public class UserManager : MonoBehaviour
     }
     public void OpenLoginBtn(){
         LogInPanel.SetActive(true);
+        GameManager.state = 1;
     }
 
     public void OpenSignUpBtn()
     {
         SignUpPanel.SetActive(true);
+        GameManager.state = 1;
         //StartCoroutine(LoginCo());
     }
 
@@ -103,7 +105,6 @@ public class UserManager : MonoBehaviour
         
     }
     public void Popup(string text)
-
     {
         PopupB.gameObject.SetActive(true);
         PopupText.text = text;
@@ -111,10 +112,7 @@ public class UserManager : MonoBehaviour
         {
             return;
         }
-        StartCoroutine(fadeoutplay(2.0f, 1.0f, 0.0f));    //코루틴 실행
-    }
-    public void selectBtn(){
-        Panel.SetActive(true);
+        StartCoroutine(fadeoutplay(2.0f, 1.0f, 0.0f));//코루틴 실행
     }
 
     IEnumerator SignUpCo()
@@ -163,5 +161,10 @@ public class UserManager : MonoBehaviour
             PopupB.gameObject.SetActive(false);
 
     }
+    public void Cancelbtn(){
+        GameManager.state = 0;
+        LogInPanel.SetActive(false);
+        SignUpPanel.SetActive(false);
+        Panel.SetActive(true);
+    }
 }
-//material

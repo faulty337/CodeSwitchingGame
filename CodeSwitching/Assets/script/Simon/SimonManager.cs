@@ -24,10 +24,6 @@ public class SimonManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
     IEnumerator DataGet()
     {
         WWWForm form = new WWWForm();
@@ -56,7 +52,7 @@ public class SimonManager : MonoBehaviour
     public void gameStart()
     {
         PlayPanel.SetActive(true);
-        PlayPanel.GetComponent<Simonplay>().GameStart();
+        PlayPanel.GetComponent<Simonplay>().GameStart(GameManager.Level, 40);
     }
 
     public void gameEnd(){
@@ -80,7 +76,7 @@ public class SimonManager : MonoBehaviour
     }
 
     public void nextLevel(){
-        if(GameManager.Level>3){
+        if(GameManager.Level<3){
             GameManager.Level +=1;
         }
         retry();

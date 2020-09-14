@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class CardScript : MonoBehaviour
 {
-    public int rotatespeed = 2;
     public int cardindex, cardnum;
     public GameObject manager, playmanager;
     
@@ -18,8 +17,7 @@ public class CardScript : MonoBehaviour
     public Sprite backImg;
     public bool isOpen = false; //false면 뒤집어져 있는 상태, true면 펼쳐져 있는 상태
 
-    private float speed = 300.0f;
-    private float delaySpeed = 0.1f;
+    private float delaySpeed = 0.05f;
     
 
     private void Start()

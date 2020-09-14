@@ -191,7 +191,7 @@ public class ComplexPlay : MonoBehaviour
         Lan2Btn.interactable = true;
         if (stageIndex != 0 && (stageIndex+1) % level == 0)
         {
-            print(stageIndex);
+            
             state = 2;
         }
         else
@@ -211,19 +211,21 @@ public class ComplexPlay : MonoBehaviour
         for (int i = stageIndex - (level-1); i <= stageIndex; i++)
         {
             Cardstr.Add(Q[i]);
+            print("Q : " + Q[i]);
         }
-        for (int i = level; i <= 16; i++)
+        for (int i = level; i < 16; i++)
         {
             int ran = Random.Range(0, cardlistcopy.Count);
             Cardstr.Add(cardlistcopy[ran][0]);
             cardlistcopy.RemoveAt(ran);
         }
+        // print("Cardstr size : " + Cardstr.Count);
         Cards = new List<GameObject>();
         int w = width;
         int h = height;
-        // for(int i = 0; i < Cardstr.Count; i++){
-        //     print("CardStr : " + Cardstr[i]);
-        // }
+        for(int i = 0; i < Cardstr.Count; i++){
+            print("CardStr : " + Cardstr[i]);
+        }
         // for(int i = 0; i < Q.Length; i++){
         //     print("Q : " + Q[i]);
         // }
@@ -234,6 +236,7 @@ public class ComplexPlay : MonoBehaviour
             card.GetComponent<AnswerCard>().cardnum = i;
             int ran = Random.Range(0, Cardstr.Count);
             card.GetComponent<AnswerCard>().cardStr = Cardstr[ran];
+            print("card"+i+"번 : " + Cardstr[ran]);
             // question[i] = Q[ranIndex[i]][Random.Range(0, Q[ranIndex[i]].Count)];
             Cardstr.RemoveAt(ran);
 
@@ -257,6 +260,7 @@ public class ComplexPlay : MonoBehaviour
     public void CardTouch(int cardIndex, string cardStr)
     {
         Input[cardTouchCount] = cardStr;
+        print(cardTouchCount + "  " + cardStr);
         cardTouchCount++;
         if (cardTouchCount % level == 0)
         {
