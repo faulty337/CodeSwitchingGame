@@ -36,17 +36,26 @@ public class CardScript : MonoBehaviour
         StartCoroutine(CardOpenAn());
     }
     IEnumerator CardOpenAn(){
-        while(transform.eulerAngles.y < 89){
-            transform.Rotate(new Vector3(0, 22.4f, 0));
-            yield return new WaitForSeconds(delaySpeed);
+        // while(transform.eulerAngles.y < 90){
+        //     transform.Rotate(new Vector3(0, 45.0f, 0));
+        //     yield return new WaitForSeconds(delaySpeed);
+        // }
+        for(int i = 0; i < 3; i++){
+            transform.Rotate(new Vector3(0, 30.0f, 0));
+            yield return new WaitForSeconds(0.02f);
         }
+        
         Cardtext.text = Cardstr;
         Card.interactable = false;
         CardImg.sprite = frontImg;
         transform.Rotate(new Vector3(0, 180, 0));
-        while(transform.eulerAngles.y < 336){
-            transform.Rotate(new Vector3(0, 22.4f, 0));
-            yield return new WaitForSeconds(delaySpeed);
+        // while(transform.eulerAngles.y < 360){
+        //     transform.Rotate(new Vector3(0, 45.0f, 0));
+        //     yield return new WaitForSeconds(delaySpeed);
+        // }
+        for(int i = 0; i < 3; i++){
+            transform.Rotate(new Vector3(0, 30.0f, 0));
+            yield return new WaitForSeconds(0.02f);
         }
         transform.eulerAngles = new Vector3(0, 0, 0);
         yield return null;

@@ -44,10 +44,9 @@ public class UserManager : MonoBehaviour
         
     }
 
+
     IEnumerator LoginCo()
     {
-        Debug.Log(IDInputField.text);
-        Debug.Log(PassInputField.text);
 
         WWWForm form = new WWWForm();
         form.AddField("Input_user", IDInputField.text);

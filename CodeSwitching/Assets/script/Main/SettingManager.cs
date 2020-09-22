@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SettingManager : MonoBehaviour
 {
-    public GameObject Statictics, GameChoice, Setting_1, SubjectChoice, Setting_Level, BackBt, past, present;
+    public GameObject Statictics, GameChoice, Setting_1, SubjectChoice, Setting_Level, BackBt, past, present, ExitPopup;
     public Image PopupB;
     public Text PopupText;
     // public GameObject Statictics;
@@ -31,12 +31,14 @@ public class SettingManager : MonoBehaviour
         SubjectChoice.SetActive(false);
         Setting_Level.SetActive(false);
         PopupB.gameObject.SetActive(false);
+        ExitPopup.SetActive(false);
         Panels = new List<GameObject>();
         Panels.Add(Statictics);
         Panels.Add(GameChoice);
         Panels.Add(Setting_1);
         Panels.Add(SubjectChoice);
         Panels.Add(Setting_Level);
+        Panels.Add(ExitPopup);
         if(GameManager.state == 3){
             gotoPanel("0,1");
             
@@ -52,10 +54,10 @@ public class SettingManager : MonoBehaviour
             {
                 switch(GameManager.state){
                     case 1:
-                        SceneManager.LoadScene("login");
+                        ExitPopup.SetActive(true);
                         break;
                     case 2:
-                        gotoPanel("1, 3");
+                        ExitPopup.SetActive(true);
                         break;
                     default:
                         BackButton();
@@ -70,7 +72,6 @@ public class SettingManager : MonoBehaviour
 
         past = Panels[int.Parse(index_p[0])];
         present = Panels[int.Parse(index_p[1])];
-        print(int.Parse(index_p[1]));
         if(int.Parse(index_p[1]) == 2 || int.Parse(index_p[1]) == 3 || int.Parse(index_p[1]) == 4){
             CancelBtn.gameObject.SetActive(true);
         }else{
@@ -93,6 +94,8 @@ public class SettingManager : MonoBehaviour
     {
         if(Lan_1.options[Lan_1.value].text == "언어1" || Lan_2.options[Lan_2.value].text=="언어2"){
             Popup("두 언어 모두 선택해주세요.");
+        }else if(Lan_1.options[Lan_1.value].text == Lan_2.options[Lan_2.value].text){
+            Popup("다른 언어를 선택해주세요.");
         }else{
             GameManager.Lan_1 = Lan_1.options[Lan_1.value].text;
             GameManager.Lan_2 = Lan_2.options[Lan_2.value].text;

@@ -8,7 +8,7 @@ public class WMEnd : MonoBehaviour
     public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5, NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
     public List<string> rank = new List<string>();
-    public Text Time;
+    public Text Time, levelObj;
     private int touch, totalCard;
     private float TotalTime;
     // Start is called before the first frame update
@@ -32,6 +32,7 @@ public class WMEnd : MonoBehaviour
         question = extract(play.GetComponent<WMplay>().question);
         TotalTime = Mathf.Round(play.GetComponent<WMplay>().totaltime*10)*0.1f;
         Time.text = this.TotalTime.ToString() + "초";
+        levelObj.text = "["+GameManager.Level.ToString()+"단계]";
         if(GameManager.Level >= 3){
             NextButton.gameObject.SetActive(false);
         }else{

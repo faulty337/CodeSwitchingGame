@@ -45,7 +45,7 @@ public class SimonManager : MonoBehaviour
         string[] data = web.text.Split(',');
         for (int i = 0; i < data.Length - 1; i += 2)
         {
-            ex = new string[2] {data[i + 1], data[i] };
+            ex = new string[2] {data[i], data[i+1] };
             Data.Add(ex);
         }
     }

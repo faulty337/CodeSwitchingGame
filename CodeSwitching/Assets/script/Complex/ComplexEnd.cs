@@ -9,7 +9,7 @@ public int[,] data;
     public GameObject play, rankbase, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
     public GameObject NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
-    public Text SequenceObj, WordObj;
+    public Text SequenceObj, WordObj, levelObj;
     public Text timeObj;
     private string saveUrl, rankUrl;
     private string Lan_1, Lan_2, id, Subject, Game, date, question, AcWord, input, AcSequence;
@@ -39,6 +39,7 @@ public int[,] data;
         CorrectResult(play.GetComponent<ComplexPlay>().Q, play.GetComponent<ComplexPlay>().Input);
         // print(question);
         // question = extract(play.GetComponent<NBackplay>().Q[]);
+        levelObj.text = "["+GameManager.Level.ToString()+"단계]";
         StartCoroutine(DataSave());
         timeObj.text = System.Math.Truncate(play.GetComponent<ComplexPlay>().totalTime).ToString() + " s";
         if(GameManager.Level >= 3){

@@ -8,7 +8,7 @@ public class Simonend : MonoBehaviour
     public int totalscore;
     public GameObject play, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5, NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
-    public Text scoreObj;
+    public Text scoreObj, levelObj;
     public Text timeObj;
     private string saveUrl;
     private string Len_1, Len_2, id, Subject, Game, date, question, answer, input, correct, reactionTime, position, Compatible, rankUrl;
@@ -56,6 +56,7 @@ public class Simonend : MonoBehaviour
         }else{
             NextButton.gameObject.SetActive(true);
         }
+        levelObj.text = "["+GameManager.Level.ToString()+"단계]";
         StartCoroutine(DataSave());
         
     }

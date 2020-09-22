@@ -8,8 +8,7 @@ public class NBackend : MonoBehaviour
     public GameObject play, rankbase, Rank_1, Rank_2, Rank_3, Rank_4, Rank_5;
     public GameObject NextButton;
     private List<GameObject> ranklist = new List<GameObject>();
-    public Text scoreObj;
-    public Text timeObj;
+    public Text scoreObj, timeObj, levelObj;
     private string saveUrl, rankUrl;
     private string Lan_1, Lan_2, id, Subject, Game, date, question, answer, input, correct, reactionTime;
     private int time, totalstage, totalscore;
@@ -40,6 +39,7 @@ public class NBackend : MonoBehaviour
         correct = CorrectResult(play.GetComponent<NBackplay>().Answer,play.GetComponent<NBackplay>().input);
         // print(correct);
         question = QuestionResult(play.GetComponent<NBackplay>().Q);
+        levelObj.text = "["+GameManager.Level.ToString()+"단계]";
         // print(question);
         // question = extract(play.GetComponent<NBackplay>().Q[]);
         StartCoroutine(DataSave());
@@ -49,6 +49,7 @@ public class NBackend : MonoBehaviour
         }else{
             NextButton.gameObject.SetActive(true);
         }
+
     }
 
     IEnumerator DataSave()

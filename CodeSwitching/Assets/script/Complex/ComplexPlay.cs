@@ -17,9 +17,10 @@ public class ComplexPlay : MonoBehaviour
     public float startTime, QTime, totalTime, timeStart;
     private float time, empty;
     private bool first, start, QInterval;
-    private List<string[]> Data, cardlist, cardlistcopy;
+    private List<string[]> Data, cardlist;
+    
     private List<GameObject> Cards;
-    private List<string> Cardstr;
+    private List<string> Cardstr, cardStrList, cardStrListCopy;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +43,7 @@ public class ComplexPlay : MonoBehaviour
         this.level = level;
         time = 0.0f;
         stageIndex = 0;
+        cardTouchCount = 0;
         startTime = 1.0f;
         totalTime = 0.0f;
         timeStart = 0.0f;
@@ -54,19 +56,26 @@ public class ComplexPlay : MonoBehaviour
         Input = new string[totalStage + 1];
         Q = new string[totalStage];
         Data = new List<string[]>();
+        Data = manager.GetComponent<ComplexManager>().Data.ConvertAll(s => s);
         StartCoroutine(GameSetting());
     }
 
     IEnumerator GameSetting()
     {
-        Data = manager.GetComponent<ComplexManager>().Data.ConvertAll(s => s);
-        cardlist = Data.ConvertAll(s => s);
+        cardStrList = new List<string>();
+        cardlist = Data;
+        print(cardlist.Count);
+        foreach(string[] str in cardlist){
+            cardStrList.Add(str[0]);
+        }
+        print(cardStrList.Count);
         for (int i = 0; i < Q.Length; i++)
         {
             int ran = Random.Range(0, cardlist.Count);
             Q[i] = cardlist[ran][0];
             cardlist.RemoveAt(ran);
         }
+        
         timeStart = 1.0f;
         yield return null;
     }
@@ -174,16 +183,18 @@ public class ComplexPlay : MonoBehaviour
     {
         int ran = Random.Range(0, Data.Count);
         question.text = Data[ran][1];
-        if (Random.Range(0, 2) > 0)
-        {
-            Lan1text.text = Data[Random.Range(0, Data.Count)][2];
-            Lan2text.text = Data[ran][2];
-        }
-        else
-        {
-            Lan2text.text = Data[Random.Range(0, Data.Count)][2];
-            Lan1text.text = Data[ran][2];
-        }
+        // if (Random.Range(0, 2) > 0)
+        // {
+        //     Lan1text.text = Data[ran][2];
+        //     Lan2text.text = Data[ran][3];
+        // }
+        // else
+        // {
+        //     Lan2text.text = Data[ran][2];
+        //     Lan1text.text = Data[ran][3];
+        // }
+        Lan1text.text = Data[ran][2];
+        Lan2text.text = Data[ran][3];
 
         Lan1.gameObject.SetActive(true);
         Lan2.gameObject.SetActive(true);
@@ -206,18 +217,21 @@ public class ComplexPlay : MonoBehaviour
         timeStart = 0.0f;
         Blockpanel.SetActive(true);
         Cardstr = new List<string>();
-        cardlistcopy = cardlist.ConvertAll(s=>s);
+        cardStrListCopy = new List<string>(cardStrList);
+        // cardStrListCopy = cardStrList.ConvertAll(s => s);
+        print(cardStrList.Count);
         // print(stageIndex + "  " + level);
         for (int i = stageIndex - (level-1); i <= stageIndex; i++)
         {
             Cardstr.Add(Q[i]);
-            print("Q : " + Q[i]);
+            cardStrListCopy.Remove(Q[i]);
         }
         for (int i = level; i < 16; i++)
         {
-            int ran = Random.Range(0, cardlistcopy.Count);
-            Cardstr.Add(cardlistcopy[ran][0]);
-            cardlistcopy.RemoveAt(ran);
+            int ran = Random.Range(0, cardStrListCopy.Count);
+            
+            Cardstr.Add(cardStrListCopy[ran]);
+            cardStrListCopy.RemoveAt(ran); 
         }
         // print("Cardstr size : " + Cardstr.Count);
         Cards = new List<GameObject>();
@@ -265,6 +279,7 @@ public class ComplexPlay : MonoBehaviour
         if (cardTouchCount % level == 0)
         {
             if(cardTouchCount >= totalStage){
+                CardClear();
                 manager.GetComponent<ComplexManager>().GameEnd();
             }else{
                 CardClear();

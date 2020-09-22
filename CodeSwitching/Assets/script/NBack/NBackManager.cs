@@ -33,6 +33,52 @@ public class NBackManager : MonoBehaviour
         blockPanel2.SetActive(false);
         ScreenSetting(GameManager.Level);
     }
+
+    public List<string[]> practiceQuestion(){
+        List<string[]> PData = new List<string[]>();
+        string[] PQuestion = new string[]{"일", "one"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"이", "two"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"삼", "three"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"사", "four"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"오", "five"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"육", "six"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"칠", "seven"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"팔", "eight"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"구", "nine"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십", "ten"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십일", "eleven"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십이", "twelve"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십삼", "thirteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십사", "fourteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십오", "fifteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십육", "sixteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십칠", "seventeen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십팔", "eighteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"십구", "nineteen"};
+        PData.Add(PQuestion);
+        PQuestion = new string[]{"이십", "twenty"};
+        PData.Add(PQuestion);
+
+        return PData;
+    }
     
     public void ScreenSetting(int level){
         
@@ -66,7 +112,7 @@ public class NBackManager : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
-        blockPanel.SetActive(false);
+        
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
@@ -79,19 +125,28 @@ public class NBackManager : MonoBehaviour
             ex = new string[2] { data[i], data[i + 1] };
             Q.Add(ex);
         }
+        blockPanel.SetActive(false);
 
     }
 
     public void GameStart()
     {
+        GameManager.state = 10;
         playpanel.SetActive(true);
-        playpanel.GetComponent<NBackplay>().GameStart(GameManager.Level, TotalStage);
+        playpanel.GetComponent<NBackplay>().GameStart(GameManager.Level, TotalStage, Q);
+    }
+
+    public void PracticeGame(){
+        playpanel.SetActive(true);
+        playpanel.GetComponent<NBackplay>().GameStart(1, 10, practiceQuestion());
+        GameManager.state = 9;
     }
     public void GameEnd(){
         playpanel.SetActive(false);
         blockPanel2.SetActive(true);
         endpanel.SetActive(true);
         endpanel.GetComponent<NBackend>().EndSetting();
+        GameManager.state = 11;
     }
 
     public void gotohome()
@@ -101,6 +156,7 @@ public class NBackManager : MonoBehaviour
     }
 
     public void retry(){
+        
         blockPanel2.SetActive(false);
         endpanel.SetActive(false);
         selectpanel.SetActive(true);

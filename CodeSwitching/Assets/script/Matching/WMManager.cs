@@ -25,7 +25,7 @@ public class WMManager : MonoBehaviour
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
         StartCoroutine(DataGet());
-        
+        ScreenSetting(GameManager.Level);
 
     }
 

@@ -28,7 +28,7 @@ public class NBackplay : MonoBehaviour
         
     }
 
-    public void GameStart(int level, int totalStage){
+    public void GameStart(int level, int totalStage, List<string[]> data){
         BlockPanel.SetActive(true);
         Score.text = "0";
         timestart = 0.0f;
@@ -45,6 +45,8 @@ public class NBackplay : MonoBehaviour
         totalTime = 0.0f;
         time = 0.0f;
         QTime = 2.0f;
+        this.data = new List<string[]>();
+        this.data = data;
         input = new string[TotalStage+1];
         RTime = new string[TotalStage+1];
         Answer = new string[TotalStage + N];
@@ -52,18 +54,20 @@ public class NBackplay : MonoBehaviour
     }
     
     IEnumerator GameSetting(){
-        data = new List<string[]>();
+        
         datacopy = new List<string[]>();
-        data = manager.GetComponent<NBackManager>().Q.ConvertAll(s => s) ;
         datacopy = data.ConvertAll(s => s);
         
         index = new List<int>();
         for(int i = 0; i < data.Count; i++){
             index.Add(i);
+            print(index[i]);
         }
         Q = new string[TotalStage+N, 4];//문제 인덱스, 출력할 문제, 문제 한영 여부
         for(int i = 0; i < N; i++){ //N까지의 문제
-            RanQ = index[Random.Range(0, datacopy.Count)];
+            int ran = Random.Range(0, datacopy.Count);
+            print(ran);
+            RanQ = index[ran];
             
             RanI = Random.Range(0, 2);
             Q[i,0] = RanQ.ToString();
@@ -152,12 +156,16 @@ public class NBackplay : MonoBehaviour
 
     public void NextQuestion(){
         stage++;
+        if(stage >= TotalStage){
+            manager.GetComponent<NBackManager>().GameEnd();
+            // if(GameManager.state == 10){
+                
+            // }
+        }
         question.text = Q[stage, 1];
         print(stage + "  " + Q[stage, 1]);
         time=0.0f;
-        if(stage > 39){
-            manager.GetComponent<NBackManager>().GameEnd();
-        }
+        
         input[stage]="pass";
         RTime[stage] = "1";
         

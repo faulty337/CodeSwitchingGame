@@ -148,7 +148,7 @@ public class WMplay : MonoBehaviour
         {
             blockpanel.SetActive(true);
             Cards[cardnum].GetComponent<CardScript>().CardOpen();
-            yield return new WaitForSeconds(0.5f);
+            // yield return new WaitForSeconds(0.5f);
             if (Cards[lastcardnum].GetComponent<CardScript>().cardindex == Cards[cardnum].GetComponent<CardScript>().cardindex)
             {
                 Cards[cardnum].GetComponent<CardScript>().Finsh();
@@ -157,7 +157,10 @@ public class WMplay : MonoBehaviour
                 count.text = passCount.ToString();
                 if(passCount == totalCard / 2)
                 {
+                    yield return new WaitForSeconds(1.0f);
                     Carddel();
+                    startTime = 0.0f;
+                    
                     manager.GetComponent<WMManager>().GameEnd();
                 }
                 blockpanel.SetActive(false);
@@ -165,7 +168,7 @@ public class WMplay : MonoBehaviour
             else
             {
                 
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(0.5f);
                 Cards[cardnum].GetComponent<CardScript>().CardClose();
                 Cards[lastcardnum].GetComponent<CardScript>().CardClose();
                 blockpanel.SetActive(false);
