@@ -19,7 +19,6 @@ public class SettingManager : MonoBehaviour
     // public GameObject present;
     private List<GameObject> Panels;
     public Dropdown Lan_1, Lan_2, level;
-    public Button CancelBtn;
 
     bool PopupStatus = false;
 
@@ -44,7 +43,6 @@ public class SettingManager : MonoBehaviour
             
         }
         GameManager.state = 3;
-        CancelBtn.gameObject.SetActive(false);
         
     }
 
@@ -72,11 +70,7 @@ public class SettingManager : MonoBehaviour
 
         past = Panels[int.Parse(index_p[0])];
         present = Panels[int.Parse(index_p[1])];
-        if(int.Parse(index_p[1]) == 2 || int.Parse(index_p[1]) == 3 || int.Parse(index_p[1]) == 4){
-            CancelBtn.gameObject.SetActive(true);
-        }else{
-            CancelBtn.gameObject.SetActive(false);
-        }
+
         past.SetActive(false);
         present.SetActive(true);
     }
@@ -87,7 +81,6 @@ public class SettingManager : MonoBehaviour
         BackBt.SetActive(true);
         Setting_1.SetActive(true);
         GameManager.state = 4;
-        CancelBtn.gameObject.SetActive(true);
     }
 
     public void LenguageSetting()

@@ -54,7 +54,7 @@ public class StroopManager : MonoBehaviour
 
 
         WWWForm form = new WWWForm();
-        form.AddField("input_Subject", "Office"); //GameManager.Subject
+        form.AddField("input_Subject", GameManager.Subject); //
         form.AddField("Lan1", GameManager.Lan_1);
         form.AddField("Lan2", GameManager.Lan_2);
         WWW web = new WWW(getUrl, form);
@@ -63,6 +63,7 @@ public class StroopManager : MonoBehaviour
             yield return null;
         }
         while (!web.isDone);
+        print(web.text);
         if (web.error != null)
         {
             Debug.LogError("web.error=" + web.error);
