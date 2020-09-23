@@ -61,11 +61,10 @@ public class NBackplay : MonoBehaviour
         index = new List<int>();
         for(int i = 0; i < data.Count; i++){
             index.Add(i);
-            print(index[i]);
         }
         Q = new string[TotalStage+N, 4];//문제 인덱스, 출력할 문제, 문제 한영 여부
         for(int i = 0; i < N; i++){ //N까지의 문제
-            int ran = Random.Range(0, datacopy.Count);
+            int ran = Random.Range(0, index.Count);
             print(ran);
             RanQ = index[ran];
             
@@ -75,12 +74,12 @@ public class NBackplay : MonoBehaviour
             Q[i,2] = RanI.ToString();
             index.Remove(RanQ);
             datacopy.Remove(datacopy[RanQ]);
-            Answer[i] = "No";
+            Answer[i] = "Pass";
         }
         for(int i = 0; i< TotalStage; i++){
             Questionmaking(i);
         }
-        input[stage]="pass";
+        input[stage]="Pass";
         RTime[stage] = "1";
         timestart = 1.0f;
         
@@ -105,6 +104,10 @@ public class NBackplay : MonoBehaviour
                 if(time > QTime){
                     question.text = " ";
                     time = 0.0f;
+                    if(Answer[stage] == "Pass" && input[stage] == "Pass"){
+                        successCount++;
+                        Score.text = successCount.ToString();
+                    }
                     QInterval = true;
                 }
             }
@@ -113,6 +116,10 @@ public class NBackplay : MonoBehaviour
                 if(time > QTime){
                     first = true;
                     time = 0.0f;
+                    if(Answer[stage] == "Pass" && input[stage] == "Pass"){
+                        successCount++;
+                        Score.text = successCount.ToString();
+                    }
                     question.text = "";
                 }
             }else{
@@ -157,16 +164,18 @@ public class NBackplay : MonoBehaviour
     public void NextQuestion(){
         stage++;
         if(stage >= TotalStage){
-            manager.GetComponent<NBackManager>().GameEnd();
-            // if(GameManager.state == 10){
-                
-            // }
+            
+            if(GameManager.state == 10){
+                manager.GetComponent<NBackManager>().GameEnd();
+            }else{
+                manager.GetComponent<NBackManager>().PracticeGameEnd();
+            } 
         }
         question.text = Q[stage, 1];
         print(stage + "  " + Q[stage, 1]);
         time=0.0f;
         
-        input[stage]="pass";
+        input[stage]="Pass";
         RTime[stage] = "1";
         
         
@@ -193,7 +202,7 @@ public class NBackplay : MonoBehaviour
         question.text = Q[stage, 1];
         print(0 + "" + Q[stage, 1]);
         time=0.0f;
-        input[stage]="pass";
+        input[stage]="Pass";
         RTime[stage] = "1";
     }
 }

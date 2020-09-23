@@ -24,10 +24,12 @@ public class WMplay : MonoBehaviour
         
     }
 
-    public void StartSetting(int level){
+    public void StartSetting(int level, List<string[]> Data){
         blockpanel.SetActive(true);
         passCount = 0;
         count.text = "0";
+        this.Data = new List<string[]>();
+        this.Data = Data.ConvertAll(s => s);
         switch (level)
         {
             case 1 :
@@ -65,8 +67,7 @@ public class WMplay : MonoBehaviour
         height = (((cardH * y) + (cardMargin * (y - 1)))/2)-(cardH/2) - 30;
         totalCard = ((x * y) / 2)*2;
         question = new string[totalCard];
-        Data = new List<string[]>();
-        Data = manager.GetComponent<WMManager>().Data.ConvertAll(s => s);
+        
         ranIndex = new List<int>();
         index = new List<int>();
         Q = new List<List<string>>();
@@ -109,7 +110,6 @@ public class WMplay : MonoBehaviour
             card.GetComponent<RectTransform>().anchoredPosition = new Vector2(w, height);
             card.SetActive(true);
             
-            print(card.GetComponent<RectTransform>().rect.height);
             w = w + DistanceW;
             if ((i+1)%x == 0)
             {
@@ -160,8 +160,12 @@ public class WMplay : MonoBehaviour
                     yield return new WaitForSeconds(1.0f);
                     Carddel();
                     startTime = 0.0f;
+                    if(GameManager.state == 10){
+                        manager.GetComponent<WMManager>().GameEnd();
+                    }else{
+                        manager.GetComponent<WMManager>().PracticeGameEnd();
+                    }
                     
-                    manager.GetComponent<WMManager>().GameEnd();
                 }
                 blockpanel.SetActive(false);
             }

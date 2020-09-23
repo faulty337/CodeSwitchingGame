@@ -61,7 +61,7 @@ public class WMEnd : MonoBehaviour
         print(TotalTime);
         WWW webRequest = new WWW(saveUrl, form);
         yield return webRequest;
-        print(webRequest.text);
+        // print(webRequest.text);
         StartCoroutine(Rankget());
     }
 

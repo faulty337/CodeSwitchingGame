@@ -24,7 +24,7 @@ public class Simonplay : MonoBehaviour
         
     }
 
-    public void GameStart(int level, int totalStage){
+    public void GameStart(int level, int totalStage, List<string[]> Data){
         timestart = 0.0f;
         empty = 0.2f;
         Question.text = "";
@@ -38,6 +38,7 @@ public class Simonplay : MonoBehaviour
         totalTime = 0.0f;
         start = false;
         startTime = 1.0f;
+        this.Data = Data.ConvertAll(s => s);
         switch(level){
             case 1:
                 this.level = 3;
@@ -57,7 +58,7 @@ public class Simonplay : MonoBehaviour
     }
 
     IEnumerator GameSetting(){
-        Data = manager.GetComponent<SimonManager>().Data.ConvertAll(s => s);
+        
         blockPanel.SetActive(true);
         Qtime = 2.0f;
         input = new string[TotalStage+1];
@@ -148,7 +149,12 @@ public class Simonplay : MonoBehaviour
         }
         
         if(stage >= TotalStage){
-            manager.GetComponent<SimonManager>().gameEnd();
+            if(GameManager.state == 10){
+                manager.GetComponent<SimonManager>().gameEnd();
+            }else{
+                manager.GetComponent<SimonManager>().PracticeGameEnd();
+            }
+            
         }
     }
     public void QuestionMaking(int st){

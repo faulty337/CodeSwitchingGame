@@ -27,10 +27,11 @@ public class StroopPlay : MonoBehaviour
         
     }
 
-    public void StartSetting(int level, int totalStage){
+    public void StartSetting(int level, int totalStage, List<string[]> Data){
         TotalStage = totalStage;
         blockPanel.SetActive(true);
         this.level = level;
+        this.Data = Data.ConvertAll(s => s);
         StartCoroutine(GameSetting());
         
     }
@@ -54,7 +55,7 @@ public class StroopPlay : MonoBehaviour
         stage = 0;
         
         //{"<color=#bf2836>", "<color=#f3c500>", "<color=#0c7b3f>", "<color=#004e9e>"};
-        Data = manager.GetComponent<StroopManager>().Data.ConvertAll(s => s);
+
         
         reactionTime = new string[TotalStage+1];
         Q = new string[TotalStage+1];
@@ -143,7 +144,12 @@ public class StroopPlay : MonoBehaviour
         stage++;
         Question.text = colorNum[QuestionIndex[stage, 0]] +colorstr[QuestionIndex[stage, 1]]+" "+Q[stage]+"</color>";
         if(stage >= TotalStage){
-            manager.GetComponent<StroopManager>().gameEnd();
+            if(GameManager.state == 10){
+                manager.GetComponent<StroopManager>().gameEnd();
+            }else{
+                manager.GetComponent<StroopManager>().PracticeGameEnd();
+            }
+            
         }
     }
     public void QuestionMaking(int st){

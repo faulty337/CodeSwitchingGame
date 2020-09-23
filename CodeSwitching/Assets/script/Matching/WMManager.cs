@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class WMManager : MonoBehaviour
 {
 
-    public GameObject PlayPanel, SelectPanel, EndPanel, blockpanel, blockPanel_2;
+    public GameObject PlayPanel, SelectPanel, EndPanel, blockpanel, blockPanel2, PracticeEndPanel;
     public List<string[]> Data = new List<string[]>();
     public string getUrl;
     public int failCount, touchCount;
@@ -46,27 +46,47 @@ public class WMManager : MonoBehaviour
         }
         Description.text = "서로 같은 뜻의 단어쌍을 찾으세요. "+leveltext+" 찾으면 됩니다.\n\n게임설명을 \"꼭\" 보세요.";
     }
+    
+    public void PracticeGameStart(){
+        blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
+        PlayPanel.SetActive(true);
+        PlayPanel.GetComponent<WMplay>().StartSetting(1, practiceQuestion());
+        GameManager.state = 9;
+    }
+    public void PracticeGameEnd(){
+        blockPanel2.SetActive(true);
+        PlayPanel.SetActive(false);
+        PracticeEndPanel.SetActive(true);
+        GameManager.state = 12;
+    }
 
     public void GameStart()
     {
+        blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
         PlayPanel.SetActive(true);
-        PlayPanel.GetComponent<WMplay>().StartSetting(GameManager.Level);
+        PlayPanel.GetComponent<WMplay>().StartSetting(GameManager.Level, Data);
         SelectPanel.SetActive(false);
+        GameManager.state = 10;
     }
 
     public void GameEnd(){
         PlayPanel.SetActive(false);
         SelectPanel.SetActive(true);
-        blockPanel_2.SetActive(true);
+        blockPanel2.SetActive(true);
         EndPanel.SetActive(true);
         EndPanel.GetComponent<WMEnd>().EndSetting();
+        GameManager.state = 13;
     }
 
     public void retry(){
-        blockPanel_2.SetActive(false);
+        blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
         ScreenSetting(GameManager.Level);
+        GameManager.state = 8;
     }
 
     public void nextLevel(){
@@ -108,6 +128,29 @@ public class WMManager : MonoBehaviour
         SceneManager.LoadScene("Main");
         GameManager.state = 3;
     }
-
+    public List<string[]> practiceQuestion(){
+        List<string[]> PData = new List<string[]>();
+        PData.Add(new string[]{"일", "one"});
+        PData.Add(new string[]{"이", "two"});
+        PData.Add(new string[]{"삼", "three"});
+        PData.Add(new string[]{"사", "four"});
+        PData.Add(new string[]{"오", "five"});
+        PData.Add(new string[]{"육", "six"});
+        PData.Add(new string[]{"칠", "seven"});
+        PData.Add(new string[]{"팔", "eight"});
+        PData.Add(new string[]{"구", "nine"});
+        PData.Add(new string[]{"십", "ten"});
+        PData.Add(new string[]{"십일", "eleven"});
+        PData.Add(new string[]{"십이", "twelve"});
+        PData.Add(new string[]{"십삼", "thirteen"});
+        PData.Add(new string[]{"십사", "fourteen"});
+        PData.Add(new string[]{"십오", "fifteen"});
+        PData.Add(new string[]{"십육", "sixteen"});
+        PData.Add(new string[]{"십칠", "seventeen"});
+        PData.Add(new string[]{"십팔", "eighteen"});
+        PData.Add(new string[]{"십구", "nineteen"});
+        PData.Add(new string[]{"이십", "twenty"});
+        return PData;
+    }
     
 }

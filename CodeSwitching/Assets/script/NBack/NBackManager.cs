@@ -15,7 +15,7 @@ public class NBackManager : MonoBehaviour
 
     private string level; 
 
-    public GameObject playpanel, endpanel, selectpanel, blockPanel, blockPanel2;
+    public GameObject playpanel, endpanel, selectpanel, blockPanel, blockPanel2, PracticeEndPanel;
     public string getUrl;
     // Start is called before the first frame update
     void Start()
@@ -31,52 +31,32 @@ public class NBackManager : MonoBehaviour
         endpanel.SetActive(false);
         blockPanel.SetActive(false);
         blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
         ScreenSetting(GameManager.Level);
     }
 
     public List<string[]> practiceQuestion(){
         List<string[]> PData = new List<string[]>();
-        string[] PQuestion = new string[]{"일", "one"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"이", "two"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"삼", "three"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"사", "four"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"오", "five"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"육", "six"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"칠", "seven"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"팔", "eight"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"구", "nine"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십", "ten"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십일", "eleven"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십이", "twelve"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십삼", "thirteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십사", "fourteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십오", "fifteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십육", "sixteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십칠", "seventeen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십팔", "eighteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"십구", "nineteen"};
-        PData.Add(PQuestion);
-        PQuestion = new string[]{"이십", "twenty"};
-        PData.Add(PQuestion);
-
+        PData.Add(new string[]{"일", "one"});
+        PData.Add(new string[]{"이", "two"});
+        PData.Add(new string[]{"삼", "three"});
+        PData.Add(new string[]{"사", "four"});
+        PData.Add(new string[]{"오", "five"});
+        PData.Add(new string[]{"육", "six"});
+        PData.Add(new string[]{"칠", "seven"});
+        PData.Add(new string[]{"팔", "eight"});
+        PData.Add(new string[]{"구", "nine"});
+        PData.Add(new string[]{"십", "ten"});
+        PData.Add(new string[]{"십일", "eleven"});
+        PData.Add(new string[]{"십이", "twelve"});
+        PData.Add(new string[]{"십삼", "thirteen"});
+        PData.Add(new string[]{"십사", "fourteen"});
+        PData.Add(new string[]{"십오", "fifteen"});
+        PData.Add(new string[]{"십육", "sixteen"});
+        PData.Add(new string[]{"십칠", "seventeen"});
+        PData.Add(new string[]{"십팔", "eighteen"});
+        PData.Add(new string[]{"십구", "nineteen"});
+        PData.Add(new string[]{"이십", "twenty"});
         return PData;
     }
     
@@ -131,22 +111,33 @@ public class NBackManager : MonoBehaviour
 
     public void GameStart()
     {
+        blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
         GameManager.state = 10;
         playpanel.SetActive(true);
         playpanel.GetComponent<NBackplay>().GameStart(GameManager.Level, TotalStage, Q);
     }
 
-    public void PracticeGame(){
+    public void PracticeGameStart(){
+        blockPanel2.SetActive(false);
+        PracticeEndPanel.SetActive(false);
         playpanel.SetActive(true);
         playpanel.GetComponent<NBackplay>().GameStart(1, 10, practiceQuestion());
         GameManager.state = 9;
     }
+    public void PracticeGameEnd(){
+        blockPanel2.SetActive(true);
+        playpanel.SetActive(false);
+        PracticeEndPanel.SetActive(true);
+        GameManager.state = 12;
+    }
+
     public void GameEnd(){
         playpanel.SetActive(false);
         blockPanel2.SetActive(true);
         endpanel.SetActive(true);
         endpanel.GetComponent<NBackend>().EndSetting();
-        GameManager.state = 11;
+        GameManager.state = 13;
     }
 
     public void gotohome()
@@ -156,11 +147,12 @@ public class NBackManager : MonoBehaviour
     }
 
     public void retry(){
-        
+        PracticeEndPanel.SetActive(false);
         blockPanel2.SetActive(false);
         endpanel.SetActive(false);
         selectpanel.SetActive(true);
         ScreenSetting(GameManager.Level);
+        GameManager.state = 8;
     }
 
     public void nextLevel(){

@@ -34,7 +34,7 @@ public class ComplexPlay : MonoBehaviour
 
     }
 
-    public void StartSetting(int stageSize, int level)
+    public void StartSetting(int stageSize, int level, List<string[]> Data)
     {
         Blockpanel.SetActive(true);
         Lan1.gameObject.SetActive(false);
@@ -55,15 +55,15 @@ public class ComplexPlay : MonoBehaviour
         start = false;
         Input = new string[totalStage + 1];
         Q = new string[totalStage];
-        Data = new List<string[]>();
-        Data = manager.GetComponent<ComplexManager>().Data.ConvertAll(s => s);
+        this.Data = new List<string[]>();
+        this.Data = Data.ConvertAll(s => s);
         StartCoroutine(GameSetting());
     }
 
     IEnumerator GameSetting()
     {
         cardStrList = new List<string>();
-        cardlist = Data;
+        cardlist = Data.ConvertAll(s => s);
         print(cardlist.Count);
         foreach(string[] str in cardlist){
             cardStrList.Add(str[0]);
@@ -280,7 +280,12 @@ public class ComplexPlay : MonoBehaviour
         {
             if(cardTouchCount >= totalStage){
                 CardClear();
-                manager.GetComponent<ComplexManager>().GameEnd();
+                if(GameManager.state == 10){
+                    manager.GetComponent<ComplexManager>().GameEnd();
+                }else{
+                    manager.GetComponent<ComplexManager>().PracticeGameEnd();
+                }
+                
             }else{
                 CardClear();
                 state = 0;
