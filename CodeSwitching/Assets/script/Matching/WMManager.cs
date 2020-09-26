@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class WMManager : MonoBehaviour
 {
 
-    public GameObject PlayPanel, SelectPanel, EndPanel, blockpanel, blockPanel2, PracticeEndPanel;
+    public GameObject PlayPanel, SelectPanel, EndPanel, blockpanel, blockPanel2, PracticeEndPanel, WordNotePanel;
     public List<string[]> Data = new List<string[]>();
     public string getUrl;
     public int failCount, touchCount;
@@ -83,6 +83,7 @@ public class WMManager : MonoBehaviour
     public void retry(){
         blockPanel2.SetActive(false);
         PracticeEndPanel.SetActive(false);
+        WordNotePanel.SetActive(false);
         EndPanel.SetActive(false);
         SelectPanel.SetActive(true);
         ScreenSetting(GameManager.Level);
@@ -95,6 +96,12 @@ public class WMManager : MonoBehaviour
         }
         retry();
 
+    }
+
+    public void WordNotePopup(){
+        blockPanel2.SetActive(true);
+        WordNotePanel.SetActive(true);
+        WordNotePanel.GetComponent<Wordlist>().WordSet(Data, GameManager.Subject);
     }
 
     IEnumerator DataGet()

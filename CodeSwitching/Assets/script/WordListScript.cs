@@ -13,6 +13,6 @@ public class WordListScript : MonoBehaviour
     }
     public void ContentUpdata(string lan1, string lan2){
         Lan1.text = lan1;
-        Lan1.text = lan2;
+        Lan2.text = lan2;
     }
 }

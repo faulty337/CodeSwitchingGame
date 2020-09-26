@@ -15,7 +15,7 @@ public class ComplexManager : MonoBehaviour
 
     private string leveltext; 
 
-    public GameObject playpanel, endpanel, selectpanel, blockPanel, blockPanel2, PracticeEndPanel;
+    public GameObject playpanel, endpanel, selectpanel, blockPanel, blockPanel2, PracticeEndPanel, WordNotePanel;
     public string getUrl;
     // Start is called before the first frame update
     void Start()
@@ -140,6 +140,7 @@ public class ComplexManager : MonoBehaviour
     }
 
     public void retry(){
+        WordNotePanel.SetActive(false);
         PracticeEndPanel.SetActive(false);
         blockPanel2.SetActive(false);
         endpanel.SetActive(false);
@@ -155,6 +156,11 @@ public class ComplexManager : MonoBehaviour
         }
         retry();
 
+    }
+    public void WordNotePopup(){
+        blockPanel2.SetActive(true);
+        WordNotePanel.SetActive(true);
+        WordNotePanel.GetComponent<Wordlist>().WordSet(Data, GameManager.Subject);
     }
     public List<string[]> practiceQuestion(){
         List<string[]> PData = new List<string[]>();
